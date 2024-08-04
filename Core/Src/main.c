@@ -33,12 +33,14 @@
 #define A 			0.007177734375f
 #define B 			0.00053263221801584764920766930190693f
 
+/***************************************各类函数声明****************************************/
 void SystemClock_Config(void);
 int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
 int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
+static float invSqrt(float x); 		//快速计算 1/Sqrt(x)
+void AHRS(float gx, float gy, float gz, float ax, float ay, float az); //四元数姿态解算
 
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//��ʱ��2�жϷ�����
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断回调函数500ms一次
 {
 	if(htim == &htim2)
 	{
@@ -46,25 +48,29 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//��ʱ��2�жϷ����
 	}
 }
 
-int fputc(int ch, FILE *f) //printf�ض���
+int fputc(int ch, FILE *f) //printf重定向
 {
 	uint8_t temp[1] = {ch};
 	HAL_UART_Transmit(&huart1, temp, 1, 2);//
 	return ch;
 }
 
-////////////////////////////////////////////����ĸ������/////////////////////////////////////////////////
+////////////////////////////////////////////各类变量定义/////////////////////////////////////////////////
 
-int8_t rslt;  //���ܴ���������״̬�ı���
+int8_t rslt;    //用来记录IMU初始化状态
 uint8_t data = 0;
 
-float accRange;
+
 float gyro_x;
 float gyro_y;
 float gyro_z;
 float accel_x;
 float accel_y;
 float accel_z;
+
+float Pitch;
+float Roll;
+float Yaw;
 
 
 struct bmi08x_sensor_data user_accel_bmi088;
@@ -78,7 +84,7 @@ struct bmi08x_dev dev = {
         .write = &stm32_i2c_write, 
         .delay_ms = &HAL_Delay
 };
-////////////////////////////////////////////����ĸ������/////////////////////////////////////////////////
+////////////////////////////////////////////主函数/////////////////////////////////////////////////
 
 int main(void)
 {
@@ -90,9 +96,9 @@ int main(void)
 	MX_USART1_UART_Init();
 	MX_TIM2_Init();
 
-	HAL_TIM_Base_Start_IT(&htim2);	//������ʱ��2��������
+	HAL_TIM_Base_Start_IT(&htim2);
 	
-/////////////////////////////////////BMI088��ʼ�����//////////////////////////////////////////
+/////////////////////////////////////BMI088初始化相关//////////////////////////////////////////
 	rslt = bmi088_init(&dev);
 	
 	if(rslt == BMI08X_OK) 
@@ -150,60 +156,114 @@ int main(void)
 	
 	rslt = bmi08g_set_meas_conf(&dev);
 	   
-//	switch(dev.accel_cfg.range)
-//	{
-//		case BMI088_ACCEL_RANGE_3G:  accRange = 3000;  break;
-//		case BMI088_ACCEL_RANGE_6G:  accRange = 6000;  break;
-//		case BMI088_ACCEL_RANGE_12G: accRange = 12000; break;
-//		case BMI088_ACCEL_RANGE_24G: accRange = 24000; break;
-//		default: accRange = 24000;		
-//	}
-	
+/////////////////////////////////////BMI088初始化相关//////////////////////////////////////////
 	
   while (1)
   {
-	rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
-	/* Read the sensor data into the sensor data instance */
-	rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);
-	  
-	gyro_x = user_gyro_bmi088.x;
-	gyro_y = user_gyro_bmi088.y;
-	gyro_z = user_gyro_bmi088.z;
-	accel_x = user_accel_bmi088.x;
-	accel_y = user_accel_bmi088.y;
-	accel_z = user_accel_bmi088.z;
-	
-	printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);
-	
-	HAL_Delay(10);
+    //读取加速度计和陀螺仪数据
+    rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
+    rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);
+      
+    gyro_x = user_gyro_bmi088.x*B;
+		gyro_y = user_gyro_bmi088.y*B;
+		gyro_z = user_gyro_bmi088.z*B;
+		accel_x = user_accel_bmi088.x*A;
+		accel_y = user_accel_bmi088.y*A;
+		accel_z = user_accel_bmi088.z*A;
+    //串口输出原始数据    
+//    printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);
+    AHRS(gyro_x,gyro_y,gyro_z,accel_x,accel_y,accel_z);
+    printf("%.2f,%.2f,%.2f\n\r",Pitch,Roll,Yaw);
+    HAL_Delay(10);
   }
 }
 
-
-
+/********************************I2C相关函数*********************************************/
 int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
 {
 	HAL_I2C_Mem_Write(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
 	while(HAL_I2C_GetState(&hi2c1) == HAL_I2C_STATE_BUSY);
-	
 	return 0;
 }
 
 int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
 {	
 	HAL_I2C_Mem_Read(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
-
 	return 0;
 }
 
+// IMU 相关宏定义
+#define	_IMU_PI		  3.14159265f
+#define	_IMU_Kp		  0.8f
+#define	_IMU_Ki		  0.001f
+#define	_IMU_Half_T	0.005f         //表示四元数更新周期的一半
 
+float  q0 = 1, q1 = 0, q2 = 0, q3 = 0;  //四元数
+float  exInt = 0, eyInt = 0, ezInt = 0; //叉积计算误差的累计积分
 
+void AHRS(float gx, float gy, float gz, float ax, float ay, float az) //四元数姿态解算
+{
+    float norm;
+    float vx, vy, vz;
+    float ex, ey, ez;
 
+    //归一化加速度计的三轴数据
+    norm = invSqrt(ax*ax + ay*ay + az*az);
+    ax = ax * norm;
+	  ay = ay * norm;
+	  az = az * norm;
 
+    //加速度计重力向量转换到b系（四元数推出的实际重力方向）
+    vx = 2 * (q1 * q3 - q0 * q2);
+    vy = 2 * (q0 * q1 + q2 * q3);
+    vz = q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ;
+/**************************仅依靠加速计补偿无法修正Z轴的偏差*******************/
+/**************************此处还需要通过磁力计来修正Z轴*******************/
+    //叉积误差
+    ex = (ay * vz - az * vy) ;
+    ey = (az * vx - ax * vz) ;
+    ez = (ax * vy - ay * vx) ;
 
+    //叉积误差积分为角速度
+    exInt = exInt + ex * _IMU_Ki;
+    eyInt = eyInt + ey * _IMU_Ki;
+    ezInt = ezInt + ez * _IMU_Ki;
 
+    //角速度补偿
+    gx = gx + _IMU_Kp * ex + exInt;
+    gy = gy + _IMU_Kp * ey + eyInt;
+    gz = gz + _IMU_Kp * ez + ezInt;
 
+    //一阶龙格库塔法更新四元数
+    q0 = q0 + (-q1 * gx - q2 * gy - q3 * gz) * _IMU_Half_T;
+    q1 = q1 + ( q0 * gx + q2 * gz - q3 * gy) * _IMU_Half_T;
+    q2 = q2 + ( q0 * gy - q1 * gz + q3 * gx) * _IMU_Half_T;
+    q3 = q3 + ( q0 * gz + q1 * gy - q2 * gx) * _IMU_Half_T;
 
+    //单位化四元数
+    norm = invSqrt(q0*q0 + q1*q1 + q2*q2 + q3*q3);
+  	q0 = q0 * norm;
+  	q1 = q1 * norm;
+  	q2 = q2 * norm;  
+  	q3 = q3 * norm;
+
+    //四元数反解欧拉角
+	  Yaw = atan2(2.f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)* 57.3f;
+	  Pitch = -asin(2.f * (q1 * q3 - q0 * q2))* 57.3f;
+	  Roll = atan2(2.f * q2 * q3 + 2.f * q0 * q1, q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)* 57.3f;
+
+}
+
+static float invSqrt(float x) 		//快速计算 1/Sqrt(x)
+{
+	float halfx = 0.5f * x;
+	float y = x;
+	long i = *(long*)&y;
+	i = 0x5f3759df - (i>>1);
+	y = *(float*)&i;
+	y = y * (1.5f - (halfx * y * y));
+	return y;
+}
 
 
 

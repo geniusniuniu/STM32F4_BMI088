@@ -8,6 +8,7 @@
                 "c:\\Users\\gyy\\Desktop\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
                 "c:\\Users\\gyy\\Desktop\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
                 "c:\\Users\\gyy\\Desktop\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Include",
+                "c:\\Users\\gyy\\Desktop\\STM32F4_Test\\IIC_Test\\BMI088",
                 "D:\\keil5\\keil5_MDK\\keil5_MDK_32\\ARM\\ARMCC\\include",
                 "D:\\keil5\\keil5_MDK\\keil5_MDK_32\\ARM\\ARMCC\\include\\rw",
                 "c:\\Users\\gyy\\Desktop\\STM32F4_Test\\IIC_Test\\MDK-ARM",
