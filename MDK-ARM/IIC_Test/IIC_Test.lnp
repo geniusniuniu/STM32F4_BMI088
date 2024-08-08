@@ -1,6 +1,7 @@
 --cpu=Cortex-M4.fp.sp
 "iic_test\startup_stm32f407xx.o"
 "iic_test\main.o"
+"iic_test\imu.o"
 "iic_test\gpio.o"
 "iic_test\i2c.o"
 "iic_test\tim.o"
