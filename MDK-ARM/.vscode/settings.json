@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "imu.h": "c",
+        "bmi088.h": "c",
+        "main.h": "c",
+        "algorithm": "c"
+    }
+}

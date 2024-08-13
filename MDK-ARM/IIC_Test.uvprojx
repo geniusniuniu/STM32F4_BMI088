@@ -439,11 +439,6 @@
               <FilePath>..\BMI088\bmi08g.c</FilePath>
             </File>
             <File>
-              <FileName>bmi085.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BMI088\bmi085.c</FilePath>
-            </File>
-            <File>
               <FileName>bmi088.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BMI088\bmi088.c</FilePath>
@@ -457,6 +452,16 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>position.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BMI088\position.c</FilePath>
+            </File>
+            <File>
+              <FileName>position.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMI088\position.h</FilePath>
             </File>
           </Files>
         </Group>
