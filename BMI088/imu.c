@@ -2,9 +2,7 @@
 #include <math.h>
 
 // IMU 相关宏定义
-#define	_IMU_PI		  3.14159265f
-#define	_IMU_Kp		  5.0f			
-#define	_IMU_Ki		  0.008f		
+#define	_IMU_PI		  3.14159265f		
 #define	_IMU_Half_T	  0.005f         //表示四元数更新周期的一半，需要根据实际情况调整
 
 #define halfT 0.0085f
@@ -36,64 +34,12 @@ typedef struct
     float _delay_element_21;    // 延迟元素2  
 } LPF;
 
+float imu_Kp = 5.0f;
+float imu_Ki = 0.008f;
 
+Quaternion quart = {1.0f, 0.0f, 0.0f, 0.0f};
 
-float  q0 = 1, q1 = 0, q2 = 0, q3 = 0;  //四元数
 float  exInt = 0, eyInt = 0, ezInt = 0; //叉积计算误差的累计积分
-void AHRS_1(float gx, float gy, float gz, float ax, float ay, float az) //四元数姿态解算
-{
-	float norm;
-	float vx, vy, vz;
-	float ex, ey, ez;
-
-	//归一化加速度计的三轴数据
-	norm = invSqrt(ax*ax + ay*ay + az*az);
-	ax = ax * norm;
-	ay = ay * norm;
-	az = az * norm;
-
-	//加速度计重力向量转换到b系（四元数推出的实际重力方向）
-	vx = 2 * (q1 * q3 - q0 * q2);
-	vy = 2 * (q0 * q1 + q2 * q3);
-	vz = q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ;
-	/**************************仅依靠加速计补偿无法修正Z轴的偏差*******************/
-	/**************************此处还需要通过磁力计来修正Z轴*******************/
-	//叉积误差
-	ex = (ay * vz - az * vy) ;
-	ey = (az * vx - ax * vz) ;
-	ez = (ax * vy - ay * vx) ;
-
-	//叉积误差积分为角速度
-	exInt = exInt + ex * _IMU_Ki;
-	eyInt = eyInt + ey * _IMU_Ki;
-	ezInt = ezInt + ez * _IMU_Ki;
-
-	//角速度补偿
-	gx = gx + _IMU_Kp * ex + exInt;
-	gy = gy + _IMU_Kp * ey + eyInt;
-	gz = gz + _IMU_Kp * ez + ezInt;
-
-	//一阶龙格库塔法更新四元数
-	q0 = q0 + (-q1 * gx - q2 * gy - q3 * gz) * _IMU_Half_T;
-	q1 = q1 + ( q0 * gx + q2 * gz - q3 * gy) * _IMU_Half_T;
-	q2 = q2 + ( q0 * gy - q1 * gz + q3 * gx) * _IMU_Half_T;
-	q3 = q3 + ( q0 * gz + q1 * gy - q2 * gx) * _IMU_Half_T;
-
-	//单位化四元数
-	norm = invSqrt(q0*q0 + q1*q1 + q2*q2 + q3*q3);
-	q0 = q0 * norm;
-	q1 = q1 * norm;
-	q2 = q2 * norm;  
-	q3 = q3 * norm;
-
-	//四元数反解欧拉角
-//	Yaw = atan2(2.f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)* 57.3f;
-	Pitch = -asin(2.f * (q1 * q3 - q0 * q2))* 57.3f;
-	Roll = atan2(2.f * q2 * q3 + 2.f * q0 * q1, q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)* 57.3f;
-
-}
-
-
 
 void AHRS(float gx,float gy,float gz,float ax,float ay,float az)
 {		
@@ -113,9 +59,9 @@ void AHRS(float gx,float gy,float gz,float ax,float ay,float az)
 	ay = ay * recipNorm;
 	az = az * recipNorm;
 
-	vx = 2*(q1*q3-q0*q2);
-	vy = 2*(q0*q1+q2*q3);
-	vz = q0*q0 - q1*q1- q2*q2 + q3*q3;
+	vx = 2*(quart.q1*quart.q3-quart.q0*quart.q2);
+	vy = 2*(quart.q0*quart.q1+quart.q2*quart.q3);
+	vz = quart.q0*quart.q0 - quart.q1*quart.q1- quart.q2*quart.q2 + quart.q3*quart.q3;
 
 	ex = (ay*vz - az*vy);
 	ey = (az*vx - ax*vz);
@@ -129,91 +75,23 @@ void AHRS(float gx,float gy,float gz,float ax,float ay,float az)
 	gy = gy + Kp*ey + eyInt;
 	gz = gz + Kp*ez + ezInt;
 
-	q0 = q0 +(-q1*gx-q2*gy-q3*gz)*halfT;
-	q1 = q1 +(q0*gx+q2*gz-q3*gy)*halfT;
-	q2 = q2 +(q0*gy-q1*gz+q3*gx)*halfT;
-	q3 = q3 +(q0*gz+q1*gy-q2*gx)*halfT;
+	quart.q0 = quart.q0 +(-quart.q1*gx-quart.q2*gy-quart.q3*gz)*halfT;
+	quart.q1 = quart.q1 +(quart.q0*gx+quart.q2*gz-quart.q3*gy)*halfT;
+	quart.q2 = quart.q2 +(quart.q0*gy-quart.q1*gz+quart.q3*gx)*halfT;
+	quart.q3 = quart.q3 +(quart.q0*gz+quart.q1*gy-quart.q2*gx)*halfT;
 
-	recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-	q0 = q0 * recipNorm;
-	q1 = q1 * recipNorm;
-	q2 = q2 * recipNorm;
-	q3 = q3 * recipNorm;
-			
-	Pitch = asinf(2 * q1*q3 - 2 * q0*q2) * 57.3f;
-	Roll  = atan2f(2 * q2*q3 + 2 * q0*q1, -2 * q1*q1 - 2 * q2*q2 + 1) * 57.3f;
-//	Yaw   = -atan2f(2 * q1*q2 + 2 * q0*q3, -2 * q2*q2 - 2 * q3*q3 + 1) * 57.3f;
+	recipNorm = invSqrt(quart.q0*quart.q0 + quart.q1*quart.q1 + quart.q2*quart.q2 + quart.q3*quart.q3);
+	quart.q0 = quart.q0 * recipNorm;
+	quart.q1 = quart.q1 * recipNorm;
+	quart.q2 = quart.q2 * recipNorm;
+	quart.q3 = quart.q3 * recipNorm;
+
+	#if POSITION_CALC == 0		
+		Pitch = asinf(2 * quart.q1*quart.q3 - 2 * quart.q0*quart.q2) * 57.3f;
+		Roll  = atan2f(2 * quart.q2*quart.q3 + 2 * quart.q0*quart.q1, -2 * quart.q1*quart.q1 - 2 * quart.q2*quart.q2 + 1) * 57.3f;
+		//Yaw   = -atan2f(2 * q1*q2 + 2 * q0*q3, -2 * q2*q2 - 2 * q3*q3 + 1) * 57.3f;
+	#endif
 		
-}
-
-
-void MPU_Update(float gx, float gy, float gz, float ax, float ay, float az)
-{
-	float Kp = 2.0f;
-	float Ki = 0.05f;
-	float vx, vy, vz; //实际重力加速度
-	float ex, ey, ez; //叉积计算的误差
-	float norm;
-
-	float q0q0 = q0 * q0;
-	float q0q1 = q0 * q1;
-	float q0q2 = q0 * q2;
-	float q0q3 = q0 * q3;
-	float q1q1 = q1 * q1;
-	float q1q2 = q1 * q2;
-	float q1q3 = q1 * q3;
-	float q2q2 = q2 * q2;
-	float q2q3 = q2 * q3;
-	float q3q3 = q3 * q3;
-
-	
-
-	if (ax * ay * az == 0)
-		return;
-
-	//加速度计测量的重力方向(机体坐标系)
-	norm = invSqrt(ax * ax + ay * ay + az * az);
-	ax = ax * norm;
-	ay = ay * norm;
-	az = az * norm;
-
-	//四元数推出的实际重力方向(机体坐标系)
-	vx = 2 * (q1q3 - q0q2);
-	vy = 2 * (q0q1 + q2q3);
-	vz = q0q0 - q1q1 - q2q2 + q3q3;
-
-	//叉积误差
-	ex = (ay * vz - az * vy);
-	ey = (az * vx - ax * vz);
-	ez = (ax * vy - ay * vx);
-
-	//叉积误差积分为角速度
-	exInt = exInt + ex * Ki;
-	eyInt = eyInt + ey * Ki;
-	ezInt = ezInt + ez * Ki;
-
-	//角速度补偿
-	gx = gx + Kp * ex + exInt;
-	gy = gy + Kp * ey + eyInt;
-	gz = gz + Kp * ez + ezInt;
-
-	//更新四元数
-	q0 = q0 + (-q1 * gx - q2 * gy - q3 * gz) * _IMU_Half_T;
-	q1 = q1 + (q0 * gx + q2 * gz - q3 * gy) * _IMU_Half_T;
-	q2 = q2 + (q0 * gy - q1 * gz + q3 * gx) * _IMU_Half_T;
-	q3 = q3 + (q0 * gz + q1 * gy - q2 * gx) * _IMU_Half_T;
-
-	//单位化四元数
-	norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-	q0 = q0 * norm;
-	q1 = q1 * norm;
-	q2 = q2 * norm;
-	q3 = q3 * norm;
-
-	//四元数反解欧拉角
-	Pitch = -asin(2.f * (q1q3 - q0q2)) * 57.3f;
-	Roll = atan2(2.f * q2q3 + 2.f * q0q1, q0q0 - q1q1 - q2q2 + q3q3) * 57.3f;
-    Yaw = atan2(2.f * (q1q2 + q0q3), q0q0 + q1q1 - q2q2 - q3q3) * 57.3f;
 }
 
 
@@ -228,11 +106,11 @@ LPF My_Filter;
   * @retval         none
 	* @note
   */
-void LPF2_ParamSet(float sample_freq, float cutoff_freq)
+void LPF2_ParamSet(double sample_freq, double cutoff_freq)
 {               
-    float fr = 0;
-    float ohm = 0;
-    float c = 0;
+    double fr = 0;
+    double ohm = 0;
+    double c = 0;
 
     fr = sample_freq / cutoff_freq;
     ohm = tanf(M_PI_F / fr);
