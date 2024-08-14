@@ -135,19 +135,26 @@ Vector3 rotate_vector_by_quaternion(Vector3 v, Quaternion quart);
 // 位置估计函数
 float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 {
-    static float count_2s = 0;
-    static float ax_mean = 0;
-    static float ay_mean = 0;
-    static float az_mean = 0;
-    
-    Vector3 Rotated_V3;
+    // static float count_2s = 0;
+    // static float ax_mean = 0;
+    // static float ay_mean = 0;
+    // static float az_mean = 0;
+    // float sum_ax = 0;
+    // float sum_ay = 0;
+    // float sum_az = 0;
+
+    static float count_time = 0;
+
+    Vector3 rot_acc;
+    Vector3 speed_xyz;
+    Vector3 speed_xyz_last;
+    Vector3 speed_xyz_drift;
+    Vector3 speed_xyz_drift_last;
+    Vector3 position_xyz;
 
     float acc_module;
-    float sum_ax = 0;
-    float sum_ay = 0;
-    float sum_az = 0;
 
-    Flag stationary = 0;
+    Flag stationary = 0;  //静止标志位 1:静止 0:运动
 
     //计算加速度模值
     acc_module = sqrt(ax * ax + ay * ay + az * az);
@@ -168,47 +175,92 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         stationary = 1;
     }
 
-    //进行初始收敛，以获得IMU数据的姿态估计
-    //稳定后的两秒的静态数据平均值作为后续的姿态估计的初始状态
-    if(count_2s < 400)
-    {
-        sum_ax += ax;
-        sum_ay += ay;
-        sum_az += az;
-        count_2s++;
-    }
-    else
-    {
-        //计算队列中的数据的平均值
-        ax_mean = sum_ax / 400;
-        ay_mean = sum_ay / 400;
-        az_mean = sum_az / 400;
+    // //进行初始收敛，以获得IMU数据的姿态估计
+    // //稳定后的两秒的静态数据平均值作为后续的姿态估计的初始状态
+    // if(count_2s < 400)
+    // {
+    //     sum_ax += ax;
+    //     sum_ay += ay;
+    //     sum_az += az;
+    //     count_2s++;
+    // }
+    // else
+    // {
+    //     //计算队列中的数据的平均值
+    //     ax_mean = sum_ax / 400;
+    //     ay_mean = sum_ay / 400;
+    //     az_mean = sum_az / 400;
 
-    }
+    // }
     
-    // if(stationary == 0) //在静止状态下，对加速度计的输入更加敏感
-    // {
-    //     imu_Kp = 0;
-    // }
-    // else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
-    // {
-    //     imu_Kp = 5.0;
-    // }
 
-
+    if(stationary == 0) //在静止状态下，对加速度计的输入更加敏感
+    {
+        imu_Kp = 0;
+    }
+    else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
+    {
+        imu_Kp = 5.1;
+    }
 
     //进行姿态解算，只用来获取四元数，不对角度解算。
     AHRS(gx, gy, gz, ax, ay, az);
 
-    Rotated_V3 = rotate_vector_by_quaternion(V3, quart);
-    Rotated_V3.az -= 1;
+    rot_acc = rotate_vector_by_quaternion(V3, quart);
+    rot_acc.z -= 1;
 
-    Rotated_V3.ax *= GRAVITY;
-    Rotated_V3.ay *= GRAVITY;
-    Rotated_V3.az *= GRAVITY;
+    rot_acc.x *= GRAVITY;
+    rot_acc.y *= GRAVITY;
+    rot_acc.z *= GRAVITY;
 
     //速度计算
     //速度 = 速度 + 加速度 * 时间间隔
+    if(stationary == 0)
+    {
+        speed_xyz.x = speed_xyz_last.x + rot_acc.x * 0.005f;
+        speed_xyz.y = speed_xyz_last.y + rot_acc.y * 0.005f;
+        speed_xyz.z = speed_xyz_last.z + rot_acc.z * 0.005f;
+    }
+    else //静止状态速度为0
+    {
+        speed_xyz.x = 0;
+        speed_xyz.y = 0;
+        speed_xyz.z = 0;
+    }
+
+    //对于非静止状态下的速度，计算漂移,把它从速度中移除
+    if (stationary == 0) 
+    {
+        count_time++;
+
+        speed_xyz_drift.x += speed_xyz.x;
+        speed_xyz_drift.y += speed_xyz.y;
+        speed_xyz_drift.z += speed_xyz.z;
+        if(count_time == 20)   //每100ms更新一次 速度漂移率 = 速度 / 时间
+        {
+            speed_xyz_drift.x = speed_xyz.x / count_time;
+            speed_xyz_drift.y = speed_xyz.y / count_time;
+            speed_xyz_drift.z = speed_xyz.z / count_time;
+
+            speed_xyz_drift_last = speed_xyz_drift; 
+            speed_xyz_drift = (Vector3){0, 0, 0};
+            count_time = 0;
+        }
+    }
+
+    //去除速度漂移
+    speed_xyz.x -= speed_xyz_drift_last.x*SAMPLE_TIME;
+    speed_xyz.y -= speed_xyz_drift_last.y*SAMPLE_TIME;
+    speed_xyz.z -= speed_xyz_drift_last.z*SAMPLE_TIME;
+
+    
+    //位置计算
+    position_xyz.x += speed_xyz.x * SAMPLE_TIME;
+    position_xyz.y += speed_xyz.y * SAMPLE_TIME;
+    position_xyz.z += speed_xyz.z * SAMPLE_TIME;
+
+    //更新速度
+    speed_xyz_last = speed_xyz;
 
     return 0;
     
@@ -229,20 +281,20 @@ Quaternion quat_conj(Quaternion quart)
 // 四元数与向量相乘
 Quaternion quat_multiply(Quaternion quart1, Quaternion quart2) 
 {
-    Quaternion q;
-    q.q0 = quart1.q0*quart2.q0 - quart1.q1*quart2.q1 - quart1.q2*quart2.q2 - quart1.q3*quart2.q3;
-    q.q1 = quart1.q0*quart2.q1 + quart1.q1*quart2.q0 + quart1.q2*quart2.q3 - quart1.q3*quart2.q2;
-    q.q2 = quart1.q0*quart2.q2 - quart1.q1*quart2.q3 + quart1.q2*quart2.q0 + quart1.q3*quart2.q1;
-    q.q3 = quart1.q0*quart2.q3 + quart1.q1*quart2.q2 - quart1.q2*quart2.q1 + quart1.q3*quart2.q0;
-    return q;
+    Quaternion quart;
+    quart.q0 = quart1.q0*quart2.q0 - quart1.q1*quart2.q1 - quart1.q2*quart2.q2 - quart1.q3*quart2.q3;
+    quart.q1 = quart1.q0*quart2.q1 + quart1.q1*quart2.q0 + quart1.q2*quart2.q3 - quart1.q3*quart2.q2;
+    quart.q2 = quart1.q0*quart2.q2 - quart1.q1*quart2.q3 + quart1.q2*quart2.q0 + quart1.q3*quart2.q1;
+    quart.q3 = quart1.q0*quart2.q3 + quart1.q1*quart2.q2 - quart1.q2*quart2.q1 + quart1.q3*quart2.q0;
+    return quart;
 }
 
 
 // 使用四元数旋转向量
-Vector3 rotate_vector_by_quaternion(Vector3 v, Quaternion quart) 
+Vector3 rotate_vector_by_quaternion(Vector3 v3, Quaternion quart) 
 {
     // 将向量转换为四元数，w = 0
-    Quaternion q_v = {0, v.ax, v.ay, v.az};     
+    Quaternion q_v = {0, v3.x, v3.y, v3.z};     
     // 共轭四元数
     Quaternion q_conj = quat_conj(quart);
     // 矩阵相乘 v′ = q⋅v⋅q* 
@@ -250,9 +302,9 @@ Vector3 rotate_vector_by_quaternion(Vector3 v, Quaternion quart)
 
     // 返回旋转后的向量
     Vector3 v_rotated;
-    v_rotated.ax = q_result.q1;
-    v_rotated.ay = q_result.q2;
-    v_rotated.az = q_result.q3;
+    v_rotated.x = q_result.q1;
+    v_rotated.y = q_result.q2;
+    v_rotated.z = q_result.q3;
 
     return v_rotated;
 } 

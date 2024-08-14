@@ -1,22 +1,8 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
+/******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+  ******************************************************************************/
+
 #include "main.h"
 #include "i2c.h"
 #include "tim.h"
@@ -28,11 +14,15 @@
 #include "bmi088.h"
 #include "imu.h"
 
-#define LED_PIN 	GPIO_PIN_6  
-#define LED_PORT 	GPIOA  
-#define A 			0.007177734375f
-#define B 			0.00053263221801584764920766930190693f
-#define R2D 		180.0f/M_PI_F
+//程序运行状态指示灯PA6
+#define LED_PIN 		GPIO_PIN_6  								
+#define LED_PORT 		GPIOA  
+
+#define ORIGIN_A		0.000732421875								//原始加速度计数据 （24/32768）
+#define A 				0.007177734375f								//将原始加速度计数据转换成m/s^2
+
+#define B 				0.00053263221801584764920766930190693f		//原始陀螺仪数据转 单位（rad/s）
+#define R2D 			180.0f/M_PI_F								//弧度转角度
 
 /***************************************各类函数声明****************************************/
 void SystemClock_Config(void);
@@ -72,7 +62,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 {
 	static int count = 0;
 	static int count_delay = 0;
-	static float count_mean = 0;
 
 	static float gyro_bias_z;
 	static double gyro_ave_bias_z;
@@ -88,17 +77,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 		}
 		//读取加速度计数据
 		rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
+
 		#if POSITION_CALC == 0
 			//对加速度计数据进行窗口滤波
 			ACC_XYZ_Window_Filter(&user_accel_bmi088);
-		#endif
-		accel_x = user_accel_bmi088.x*A;
-		accel_y = user_accel_bmi088.y*A;
-		accel_z = user_accel_bmi088.z*A;
 
-		V3.ax = accel_x;
-		V3.ay = accel_y;
-		V3.az = accel_z;
+			accel_x = user_accel_bmi088.x*A;
+			accel_y = user_accel_bmi088.y*A;
+			accel_z = user_accel_bmi088.z*A;
+
+		#endif
+
+		V3.x = user_accel_bmi088.x*ORIGIN_A;
+		V3.y = user_accel_bmi088.x*ORIGIN_A;
+		V3.z = user_accel_bmi088.x*ORIGIN_A;
 
 		//读取陀螺仪数据
 		rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);
@@ -155,8 +147,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 	}
 }
 
-int t = 0;
+
 ////////////////////////////////////////////主函数/////////////////////////////////////////////////
+
+int t = 0;	//t用来控制串口输出频率	改为100ms输出一次
 
 int main(void)
 {

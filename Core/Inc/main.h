@@ -32,9 +32,9 @@ extern "C" {
 void Error_Handler(void);
 
 typedef struct {
-    float ax;
-    float ay;
-    float az;
+    float x;
+    float y;
+    float z;
 } Vector3;
 
 

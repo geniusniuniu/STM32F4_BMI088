@@ -4,7 +4,7 @@
 #include "imu.h"
 #include "main.h"
 
-#define QUEUE_SIZE              10  // 队列的最大大小
+#define QUEUE_SIZE              10  // 队列的大小
 
 #define SAMPLE_FREQ             200.0f
 #define SAMPLE_TIME             1.0f/SAMPLE_FREQ
