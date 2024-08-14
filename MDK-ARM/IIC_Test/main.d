@@ -44,3 +44,4 @@ iic_test\main.o: ..\BMI088\bmi08x_defs.h
 iic_test\main.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdbool.h
 iic_test\main.o: ..\BMI088\bmi088.h
 iic_test\main.o: ..\BMI088\imu.h
+iic_test\main.o: ..\BMI088\position.h

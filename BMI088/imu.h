@@ -36,14 +36,14 @@ typedef struct {
 extern  Quaternion quart;
 
 void ACC_XYZ_Window_Filter(struct bmi08x_sensor_data *ACC_xyz); 
-void GYRO_XYZ_Window_Filter(struct bmi08x_sensor_data *GYRO_xyz);
+//void GYRO_XYZ_Window_Filter(struct bmi08x_sensor_data *GYRO_xyz);
 float Single_Window_Filter(float Sample); //窗口滤波函数
 
 
 void LPF2_ParamSet(double sample_freq, double cutoff_freq);
 float LPF2_Calculate(float sample);
 
-static float invSqrt(float x); 		//快速计算 1/Sqrt(x)
+static float invSqrt(float x); 										   //快速计算 1/Sqrt(x)
 void AHRS(float gx, float gy, float gz, float ax, float ay, float az); //四元数姿态解算
 void MPU_Update(float gx, float gy, float gz, float ax, float ay, float az);
 
