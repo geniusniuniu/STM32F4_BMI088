@@ -75,6 +75,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 			count_delay++;
 			return;
 		}
+		//等待一段时间，让陀螺仪数据稳定
+		if(count_delay < 1000)
+		{
+			count_delay++;
+			return;
+		}
 		//读取加速度计数据
 		rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
 
@@ -103,6 +109,46 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 			//对陀螺仪z轴数据进行窗口滤波
 			gyro_z1 = Single_Window_Filter(gyro_z1);
 
+		#if POSITION_CALC == 0
+			gyro_z1 = (double)gyro_z * R2D;
+			//对陀螺仪z轴数据进行窗口滤波
+			gyro_z1 = Single_Window_Filter(gyro_z1);
+
+			//对陀螺仪数据进行二阶低通滤波
+			gyro_z1 = LPF2_Calculate(gyro_z1);
+			//对陀螺仪z轴数据进行零偏消除
+			if(fabs(gyro_z1) < THRESHOLD)
+			{
+				count1++;
+				gyro_bias_z += gyro_z1;
+				if(count1 > 5)
+				{
+					gyro_ave_bias_z = gyro_bias_z/5;
+					count1 = 0;
+					gyro_bias_z = 0;	
+				}	
+				gyro_z1 -= gyro_ave_bias_z*0.835; 
+			}
+			//gyro_z1 -= gyro_ave_bias_z*0.835; 
+					
+			//去除零偏之后积分出角度
+			Yaw += (double)gyro_z1*0.005;
+			//将角度限制在+-180度之间
+			if(Yaw > 180)
+			{
+				Yaw -= 360;
+				Yaw_turn++;	//可以记录转过的圈数
+			}
+			else if(Yaw < -180)
+			{
+				Yaw += 360;
+				Yaw_turn--;
+			}
+		#elif POSITION_CALC == 1
+			Pos_Estimate(gyro_x,gyro_y,gyro_z,accel_x,accel_y,accel_z);
+
+		#endif
+		
 			//对陀螺仪数据进行二阶低通滤波
 			gyro_z1 = LPF2_Calculate(gyro_z1);
 			//对陀螺仪z轴数据进行零偏消除
@@ -231,6 +277,17 @@ int main(void)
   while (1)
   {	   
     //printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 
+	#if POSITION_CALC == 0
+    	AHRS(gyro_x,gyro_y,gyro_z,accel_x,accel_y,accel_z);	
+		HAL_Delay(10);
+		t++;
+		if(t == 1)
+		{
+			printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
+			t = 0;
+		}
+	#endif
+
 	#if POSITION_CALC == 0
     	AHRS(gyro_x,gyro_y,gyro_z,accel_x,accel_y,accel_z);	
 		HAL_Delay(10);
