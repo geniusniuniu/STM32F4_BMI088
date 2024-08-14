@@ -15,15 +15,6 @@
 #include "imu.h"
 #include "position.h"
 
-//程序运行状态指示灯PA6
-#define LED_PIN 		GPIO_PIN_6  								
-#define LED_PORT 		GPIOA  
-
-#define ORIGIN_A		0.000732421875								//原始加速度计数据 （24/32768）
-#define A 				0.007177734375f								//将原始加速度计数据转换成m/s^2
-
-#define B 				0.00053263221801584764920766930190693f		//原始陀螺仪数据转 单位（rad/s）
-#define R2D 			180.0f/M_PI_F								//弧度转角度
 
 /***************************************各类函数声明****************************************/
 void SystemClock_Config(void);
@@ -39,11 +30,8 @@ int fputc(int ch, FILE *f) //printf重定向
 }
 
 ////////////////////////////////////////////各类变量定义/////////////////////////////////////////////////
-
 int8_t rslt;    //用来记录IMU初始化状态
 uint8_t data = 0;
-
-
 
 struct bmi08x_sensor_data user_accel_bmi088;
 struct bmi08x_sensor_data user_gyro_bmi088;
@@ -90,8 +78,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 			accel_z = user_accel_bmi088.z*A;
 		#else
 			V3.x = user_accel_bmi088.x*ORIGIN_A;
-			V3.y = user_accel_bmi088.x*ORIGIN_A;
-			V3.z = user_accel_bmi088.x*ORIGIN_A;
+			V3.y = user_accel_bmi088.y*ORIGIN_A;
+			V3.z = user_accel_bmi088.z*ORIGIN_A;
 			
 		#endif
 
@@ -153,6 +141,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 ////////////////////////////////////////////主函数/////////////////////////////////////////////////
 
 int t = 0;	//t用来控制串口输出频率	改为100ms输出一次
+Vector3 PE_xyz = {0, 0, 0};
 
 int main(void)
 {
@@ -162,9 +151,10 @@ int main(void)
 	MX_GPIO_Init();
 	MX_I2C1_Init();
 	
-	//设置二阶低通滤波参数
+	//其他相关函数的参数初始化
 	LPF2_ParamSet(50, 8);
-	
+	pos_Estimate_Init();
+
 	MX_USART1_UART_Init();
 	MX_TIM2_Init();
 
@@ -244,7 +234,8 @@ int main(void)
 		}
 	#endif
 		
-	Pos_Estimate(gyro_x,gyro_y,gyro_z,V3.x,V3.y,V3.z);
+	PE_xyz = Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+//	printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\r\n", V3.x, V3.y, V3.z, PE_xyz.x, PE_xyz.y, PE_xyz.z);
 
   }
 }

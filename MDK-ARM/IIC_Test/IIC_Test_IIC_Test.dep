@@ -1,8 +1,8 @@
 Dependencies for Project 'IIC_Test', Target 'IIC_Test': (DO NOT MODIFY !)
 CompilerVersion: 5060528::V5.06 update 5 (build 528)::ARMCC
 F (startup_stm32f407xx.s)(0x66AF09D0)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32F40_41xxx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o iic_test\startup_stm32f407xx.o --depend iic_test\startup_stm32f407xx.d)
-F (../Core/Src/main.c)(0x66BC59F8)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\main.o --omf_browse iic_test\main.crf --depend iic_test\main.d)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+F (../Core/Src/main.c)(0x66BC7FAF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\main.o --omf_browse iic_test\main.crf --depend iic_test\main.d)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -46,10 +46,10 @@ I (..\BMI088\bmi08x_defs.h)(0x5EB55132)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BC4EBD)
-I (..\BMI088\position.h)(0x66BC543F)
-F (..\BMI088\imu.c)(0x66BC51B7)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\imu.o --omf_browse iic_test\imu.crf --depend iic_test\imu.d)
+I (..\BMI088\position.h)(0x66BC6014)
+F (..\BMI088\imu.c)(0x66BC8199)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\imu.o --omf_browse iic_test\imu.crf --depend iic_test\imu.d)
 I (..\BMI088\imu.h)(0x66BC4EBD)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -90,7 +90,7 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
 F (..\BMI088\imu.h)(0x66BC4EBD)()
 F (../Core/Src/gpio.c)(0x66ADFCA4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\gpio.o --omf_browse iic_test\gpio.crf --depend iic_test\gpio.d)
 I (../Core/Inc/gpio.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -125,7 +125,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 F (../Core/Src/i2c.c)(0x66ADF692)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\i2c.o --omf_browse iic_test\i2c.crf --depend iic_test\i2c.d)
 I (../Core/Inc/i2c.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -160,7 +160,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 F (../Core/Src/tim.c)(0x66B4760E)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\tim.o --omf_browse iic_test\tim.crf --depend iic_test\tim.d)
 I (../Core/Inc/tim.h)(0x66ADFCA4)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -195,7 +195,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 F (../Core/Src/usart.c)(0x66AF09CE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\usart.o --omf_browse iic_test\usart.crf --depend iic_test\usart.d)
 I (../Core/Inc/usart.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -248,7 +248,7 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stddef.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 F (../Core/Src/stm32f4xx_it.c)(0x66AF09CE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\stm32f4xx_it.o --omf_browse iic_test\stm32f4xx_it.crf --depend iic_test\stm32f4xx_it.d)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -283,7 +283,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_it.h)(0x66AF09CE)
 F (../Core/Src/stm32f4xx_hal_msp.c)(0x66ADF692)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\stm32f4xx_hal_msp.o --omf_browse iic_test\stm32f4xx_hal_msp.crf --depend iic_test\stm32f4xx_hal_msp.d)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -316,11 +316,11 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
-F (..\BMI088\position.c)(0x66BC5A0A)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\position.o --omf_browse iic_test\position.crf --depend iic_test\position.d)
+F (..\BMI088\position.c)(0x66BC8998)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\position.o --omf_browse iic_test\position.crf --depend iic_test\position.d)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
-I (..\BMI088\position.h)(0x66BC543F)
+I (..\BMI088\position.h)(0x66BC6014)
 I (..\BMI088\imu.h)(0x66BC4EBD)
-I (../Core/Inc/main.h)(0x66BC1AC6)
+I (../Core/Inc/main.h)(0x66BC7EF7)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x66AE08E4)
@@ -359,7 +359,7 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (../Core/Inc/usart.h)(0x66ADF692)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdio.h)(0x588B8344)
-F (..\BMI088\position.h)(0x66BC543F)()
+F (..\BMI088\position.h)(0x66BC6014)()
 F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c)(0x66AE08E4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F40_41xxx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\stm32f4xx_hal_i2c.o --omf_browse iic_test\stm32f4xx_hal_i2c.crf --depend iic_test\stm32f4xx_hal_i2c.d)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66AE08E4)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66ADFCA4)

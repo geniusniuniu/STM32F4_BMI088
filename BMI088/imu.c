@@ -34,8 +34,8 @@ typedef struct
     float _delay_element_21;    // 延迟元素2  
 } LPF;
 
-float imu_Kp = 5.0f;
-float imu_Ki = 0.008f;
+float imu_Kp = 1.0f;
+float imu_Ki = 0.01f;
 
 Quaternion quart = {1.0f, 0.0f, 0.0f, 0.0f};
 
@@ -114,7 +114,7 @@ void LPF2_ParamSet(double sample_freq, double cutoff_freq)
 
     fr = sample_freq / cutoff_freq;
     ohm = tanf(M_PI_F / fr);
-    c = 1.0f + 2.0f * cosf(M_PI_F / 4.0f) * ohm + ohm * ohm;
+    c = 1.0 + 2.0 * cosf(M_PI_F / 4.0) * ohm + ohm * ohm;
 
 	/* 直接给出截止频率 */
     My_Filter._cutoff_freq = cutoff_freq;
@@ -124,7 +124,7 @@ void LPF2_ParamSet(double sample_freq, double cutoff_freq)
         My_Filter._b11 = 2.0f * My_Filter._b01;
         My_Filter._b21 = My_Filter._b01;
         My_Filter._a11 = 2.0f * (ohm * ohm - 1.0f) / c;
-        My_Filter._a21 = (1.0f - 2.0f * cosf(M_PI_F / 4.0f) * ohm + ohm * ohm) / c;
+        My_Filter._a21 = (1.0 - 2.0 * cosf(M_PI_F / 4.0) * ohm + ohm * ohm) / c;
     }
 }
 

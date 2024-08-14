@@ -2,17 +2,25 @@
 #include "position.h"
 #include "usart.h"
 #include <stdio.h>
-
-
 /************************用于实现设计滤波器的相关代码***************************/
 typedef struct 
 {
     double a0, a1, b1;  // 滤波器系数
     double z1;          // 滤波器的前一输入值
-} Filter;
+}Filter;
 
 Filter H_filter;
-Filter L_filter;
+
+// 定义滤波器系数结构体
+typedef struct 
+{
+    double a[2];
+    double b[2];
+    double prev_input;    // 保存前一个输入值
+    double prev_output;   // 保存前一个输出值
+}BW_Filter;
+
+BW_Filter L_filter;
 
 // 初始化高通滤波器
 void initHighPassFilter(Filter* filter, double cutoffFreq, double sampleRate) 
@@ -35,23 +43,59 @@ float processHighPassFilter(Filter* filter, float input)
 }
 
 // 初始化低通滤波器
-void initLowPassFilter(Filter* filter, double cutoffFreq, double sampleRate) 
-{
-    double theta = 2.0 *  M_PI_F * cutoffFreq / sampleRate;
-    double d = 1.0 / (1.0 + sin(theta));
-    filter->a0 = (1.0 - cos(theta)) * d / 2.0;
-    filter->a1 = (1.0 - cos(theta)) * d / 2.0;
-    filter->b1 = (1.0 - d) * (-1.0);
-    filter->z1 = 0.0;
-}
+//void initLowPassFilter(Filter* filter, double cutoffFreq, double sampleRate) 
+//{
+//    double theta = 2.0 *  M_PI_F * cutoffFreq / sampleRate;
+//    double d = 1.0 / (1.0 + sin(theta));
+//    filter->a0 = (1.0 - cos(theta)) * d / 2.0;
+//    filter->a1 = (1.0 - cos(theta)) * d / 2.0;
+//    filter->b1 = (1.0 - d) * (-1.0);
+//    filter->z1 = 0.0;
+//}
+
 
 // 处理单个样本
-float processLowPassFilter(Filter* filter, float input) 
+//float processLowPassFilter(Filter* filter, float input) 
+//{
+//    float output = filter->a0*input + filter->a1*filter->z1 - filter->b1*filter->z1;
+//    filter->z1 = output;
+//    return output;
+//}
+
+
+void initLowPassFilter(BW_Filter *coeffs, double cutoffFreq, double sampleRate) 
 {
-    float output = filter->a0 * input + filter->a1 * filter->z1 - filter->b1 * filter->z1;
-    filter->z1 = output;
+    double tanTerm = tan(M_PI_F * cutoffFreq / sampleRate);
+    
+    coeffs->b[0] = tanTerm / (1.0 + tanTerm);
+    coeffs->b[1] = coeffs->b[0];
+
+    coeffs->a[0] = 1.0;
+    coeffs->a[1] = (tanTerm - 1.0) / (tanTerm + 1.0);
+
+    // 初始化前一个输入和输出
+    coeffs->prev_input = 0.0;
+    coeffs->prev_output = 0.0;
+}
+
+float processLowPassFilter(BW_Filter *coeffs,float input) 
+{
+    float output;
+
+    // 计算当前输出
+    output = coeffs->b[0] * input 
+				+ coeffs->b[1] * coeffs->prev_input 
+					- coeffs->a[1] * coeffs->prev_output;
+
+    // 更新历史输入和输出
+    coeffs->prev_input = input;
+    coeffs->prev_output = output;
+
     return output;
 }
+
+
+
 
 /************************用于实现设计滤波器的相关代码***************************/
 
@@ -60,20 +104,16 @@ void q_conj(Quaternion *quart);
 
 void pos_Estimate_Init(void)
 {
-    //设置高通滤波器截至频率
-    float FiltCutoff1 =  0.001f;
-    //设置低通截止频率为5 Hz
-    float FiltCutoff2 =  5;
     //初始化高通滤波器参数
-    initHighPassFilter(&H_filter, FiltCutoff1, SAMPLE_FREQ);
+    initHighPassFilter(&H_filter, FILTCUTOFF1, SAMPLE_FREQ);
 
     //初始化低通滤波器参数
-    initLowPassFilter(&L_filter, FiltCutoff2, SAMPLE_FREQ);
+    initLowPassFilter(&L_filter, FILTCUTOFF2, SAMPLE_FREQ);
 }
 
 
 //位置估计函数
-float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
+Vector3 Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 {
     // static float count_2s = 0;
     // static float ax_mean = 0;
@@ -82,7 +122,7 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     // float sum_ax = 0;
     // float sum_ay = 0;
     // float sum_az = 0;
-
+//    printf("START!!!\r\n");
     static float count_time = 0;
 
     Vector3 rot_acc;
@@ -108,13 +148,20 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 
     //对加速幅值再次进行低通滤波，以减少高频噪声。
     acc_module = processLowPassFilter(&L_filter, acc_module);
-
-    //进行阈值检测，判断是否为静止状态
-    if(acc_module < STATIONARY_THRESHOLD)
+	
+	
+	
+	
+	
+//进行阈值检测，判断是否为静止状态
+/******************************************这块代码有问题******************************/
+if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三轴加速度判断ax等
     {
         stationary = 1;
     }
 
+	
+	
     // //进行初始收敛，以获得IMU数据的姿态估计
     // //稳定后的两秒的静态数据平均值作为后续的姿态估计的初始状态
     // if(count_2s < 400)
@@ -142,23 +189,23 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         imu_Kp = 5.1;
     }
 
-    //进行姿态解算，只用来获取四元数，不对角度解算。
+    //进行姿态解算，只用来获取四元数
     AHRS(gx, gy, gz, ax, ay, az);
-
+//	printf("%f,%f,%f,%f\r\n", quart.q0, quart.q1, quart.q2, quart.q3);
     rot_acc = rotate_vector_by_quaternion(V3, quart);
     rot_acc.z -= 1;
 
     rot_acc.x *= GRAVITY;
     rot_acc.y *= GRAVITY;
     rot_acc.z *= GRAVITY;
-
+//	printf("%f,%f,%f\r\n", rot_acc.x, rot_acc.y, rot_acc.z);
     //速度计算
     //速度 = 速度 + 加速度 * 时间间隔
     if(stationary == 0)
     {
-        speed_xyz.x = speed_xyz_last.x + rot_acc.x * 0.005f;
-        speed_xyz.y = speed_xyz_last.y + rot_acc.y * 0.005f;
-        speed_xyz.z = speed_xyz_last.z + rot_acc.z * 0.005f;
+        speed_xyz.x = speed_xyz_last.x + rot_acc.x * SAMPLE_TIME;
+        speed_xyz.y = speed_xyz_last.y + rot_acc.y * SAMPLE_TIME;
+        speed_xyz.z = speed_xyz_last.z + rot_acc.z * SAMPLE_TIME;
     }
     else //静止状态速度为0
     {
@@ -166,7 +213,13 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         speed_xyz.y = 0;
         speed_xyz.z = 0;
     }
-
+//    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
+	
+	
+	
+	
+	
+	/*********************************漂移之后的数值不对劲************************/
     //对于非静止状态下的速度，计算漂移,把它从速度中移除
     if (stationary == 0) 
     {
@@ -177,9 +230,9 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         speed_xyz_drift.z += speed_xyz.z;
         if(count_time == 10)   //每50ms更新一次 速度漂移率 = 速度 / 时间
         {
-            speed_xyz_drift.x = speed_xyz.x / count_time;
-            speed_xyz_drift.y = speed_xyz.y / count_time;
-            speed_xyz_drift.z = speed_xyz.z / count_time;
+            speed_xyz_drift.x = speed_xyz.x / 50;
+            speed_xyz_drift.y = speed_xyz.y / 50;
+            speed_xyz_drift.z = speed_xyz.z / 50;
 
             speed_xyz_drift_last = speed_xyz_drift; 
             speed_xyz_drift = (Vector3){0, 0, 0};
@@ -187,22 +240,25 @@ float Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         }
     }
 
-    //去除速度漂移
-    speed_xyz.x -= speed_xyz_drift_last.x * SAMPLE_TIME;
-    speed_xyz.y -= speed_xyz_drift_last.y * SAMPLE_TIME;
-    speed_xyz.z -= speed_xyz_drift_last.z * SAMPLE_TIME;
-
+//    //去除速度漂移
+//    speed_xyz.x -= speed_xyz_drift_last.x * SAMPLE_TIME;
+//    speed_xyz.y -= speed_xyz_drift_last.y * SAMPLE_TIME;
+//    speed_xyz.z -= speed_xyz_drift_last.z * SAMPLE_TIME;
+	
+//    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
+	
+	
+	
     
-    //位置计算
-    position_xyz.x += speed_xyz.x * SAMPLE_TIME;
-    position_xyz.y += speed_xyz.y * SAMPLE_TIME;
-    position_xyz.z += speed_xyz.z * SAMPLE_TIME;
-
+//位置计算/**************************************为什么会自己清零？？？？**************************/
+    position_xyz.x += fabs(speed_xyz.x * SAMPLE_TIME);
+    position_xyz.y += fabs(speed_xyz.y * SAMPLE_TIME);
+    position_xyz.z += fabs(speed_xyz.z * SAMPLE_TIME);
+	printf("%f,%f,%f\r\n", position_xyz.x, position_xyz.y, position_xyz.z);
     //更新速度
     speed_xyz_last = speed_xyz;
 
-    return 0;
-    
+    return position_xyz;    
 }
 
 // 共轭四元数用于将向量旋转到原点的逆方向   

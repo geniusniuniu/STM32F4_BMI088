@@ -1,26 +1,21 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
+
+
+
+//程序运行状态指示灯PA6
+#define LED_PIN 		GPIO_PIN_6  								
+#define LED_PORT 		GPIOA  
+
+#define ORIGIN_A		0.000732421875								//原始加速度计数据 （24/32768）
+#define A 				0.007177734375f								//将原始加速度计数据转换成m/s^2
+//加速度原始数据转换成m/s^2
+#define GRAVITY         9.81f
+#define B 				0.00053263221801584764920766930190693f		//原始陀螺仪数据转 单位（rad/s）
+#define R2D 			180.0f/M_PI_F								//弧度转角度
+
+
+
 
 #ifdef __cplusplus
 extern "C" {
