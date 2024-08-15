@@ -116,8 +116,6 @@ Vector3 position_xyz;
 //位置估计函数
 void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 {
-    float acc_x, acc_y, acc_z;
-
     static float count_time = 0;
 
     static Vector3 rot_acc;
@@ -154,31 +152,37 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         stationary = 0;
     }
     
-    if(stationary == 1) //在静止状态下，对加速度计的输入更加敏感
-    {
-        Kp = 1.5;
-    }
-    else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
-    {
-        Kp = 0.0f;
-    }
+    // if(stationary == 1) //在静止状态下，对加速度计的输入更加敏感
+    // {
+    //     Kp = IMU_KP;
+    // }
+    // else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
+    // {
+    //     Kp = 0.0f;
+    // }
 
-    // acc_x = V3.x;
-    // acc_y = V3.y;
-    // acc_z = V3.z;
+
+/****************************************************问题排查区间********************************************/
     //进行姿态解算，只用来获取四元数
-    AHRS(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+    AHRS(gyro_x, gyro_y, gyro_z, accel_x, accel_y, accel_z);//四元数计算基本没问题
+
 //	printf("%f,%f,%f,%f\r\n", quart.q0, quart.q1, quart.q2, quart.q3);
     rot_acc = rotate_vector_by_quaternion(V3, quart);
     rot_acc.z -= 1;
 
+
+/****************************************************问题排查区间**********************************************/
+
+
+//    rot_acc = (Vector3){0,0,1};
+    
     rot_acc.x *= GRAVITY;
     rot_acc.y *= GRAVITY;
     rot_acc.z *= GRAVITY;
 //	printf("%f,%f,%f\r\n", rot_acc.x, rot_acc.y, rot_acc.z);
 	
     //速度计算
-    //速度 = 速度 + 加速度 * 时间间隔
+    //速度 = 速度 + 加速度 * 时间间隔  单位：m/s
     if(stationary == 0)
     {
         speed_xyz.x = speed_xyz_last.x + rot_acc.x * SAMPLE_TIME;
@@ -189,44 +193,45 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     {
         speed_xyz = (Vector3){0, 0, 0};
     }
-//    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
+    // printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 	
+    //更新速度
+    speed_xyz_last = speed_xyz; 
+
     //对于非静止状态下的速度，计算漂移,把它从速度中移除
     if (stationary == 0) 
     {
         count_time++;
-
-        speed_xyz_drift.x += speed_xyz.x;
-        speed_xyz_drift.y += speed_xyz.y;
-        speed_xyz_drift.z += speed_xyz.z;
-        if(count_time == 10)   //每50ms更新一次 速度漂移率 = 速度 / 时间
+        if(count_time < 1) 
         {
-            speed_xyz_drift.x = speed_xyz.x / 10;
-            speed_xyz_drift.y = speed_xyz.y / 10;
-            speed_xyz_drift.z = speed_xyz.z / 10;
+            speed_xyz_drift_last.x = speed_xyz.x;
+            speed_xyz_drift_last.y = speed_xyz.y;
+            speed_xyz_drift_last.z = speed_xyz.z;
+        }
+        if(count_time >= 10)   //每50ms更新一次 速度漂移率 = 速度差 / 时间
+        {
+            speed_xyz_drift.x = (speed_xyz.x - speed_xyz_drift_last.x)/10;
+            speed_xyz_drift.y = (speed_xyz.y - speed_xyz_drift_last.y)/10;
+            speed_xyz_drift.z = (speed_xyz.z - speed_xyz_drift_last.z)/10;
 
-            speed_xyz_drift_last = speed_xyz_drift; 
-            speed_xyz_drift = (Vector3){0, 0, 0};
             count_time = 0;
         }
     }
 
     //去除速度漂移
-    speed_xyz.x -= speed_xyz_drift_last.x * SAMPLE_TIME;
-    speed_xyz.y -= speed_xyz_drift_last.y * SAMPLE_TIME;
-    speed_xyz.z -= speed_xyz_drift_last.z * SAMPLE_TIME;
+    speed_xyz.x += speed_xyz_drift.x * SAMPLE_TIME*1.51;
+    speed_xyz.y += speed_xyz_drift.y * SAMPLE_TIME*1.51;
+    speed_xyz.z += speed_xyz_drift.z * SAMPLE_TIME*1.51;
 	
 //    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 	
 	
-	//位置计算
+	//位置计算   单位：m
     position_xyz.x += speed_xyz.x * SAMPLE_TIME;
     position_xyz.y += speed_xyz.y * SAMPLE_TIME;
     position_xyz.z += speed_xyz.z * SAMPLE_TIME;
-	printf("%f,%f,%f\r\n", position_xyz.x*10, position_xyz.y*10, position_xyz.z*10);
-    
-	//更新速度
-    speed_xyz_last = speed_xyz;   
+	printf("%f,%f,%f\r\n", position_xyz.x*100, position_xyz.y*100, position_xyz.z*100); //    单位：cm
+      
 }
 
 // 共轭四元数用于将向量旋转到原点的逆方向   

@@ -73,15 +73,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 			//对加速度计数据进行窗口滤波
 			ACC_XYZ_Window_Filter(&user_accel_bmi088);
 
-			accel_x = user_accel_bmi088.x*A;
-			accel_y = user_accel_bmi088.y*A;
-			accel_z = user_accel_bmi088.z*A;
 		#else
+
 			V3.x = user_accel_bmi088.x*ORIGIN_A;
 			V3.y = user_accel_bmi088.y*ORIGIN_A;
 			V3.z = user_accel_bmi088.z*ORIGIN_A;
 			
 		#endif
+
+		accel_x = user_accel_bmi088.x*A;
+		accel_y = user_accel_bmi088.y*A;
+		accel_z = user_accel_bmi088.z*A;
 
 		//读取陀螺仪数据
 		rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);

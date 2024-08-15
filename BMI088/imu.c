@@ -1,10 +1,9 @@
 #include "imu.h"
 #include <math.h>
 
-#define halfT 0.0085f
 
-float Kp = 1.5f;
-float Ki = 0.0008f;
+float Kp = IMU_KP;
+float Ki = IMU_KI;
 
 
 volatile float gyro_x;

@@ -27,7 +27,21 @@ Project File Date:  08/15/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin'
 Build target 'IIC_Test'
-"IIC_Test\IIC_Test.axf" - 0 Error(s), 0 Warning(s).
+compiling position.c...
+..\BMI088\position.c(222): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      speed_xyz.x += speed_xyz_drift.x * 
+AMPLE_TIME*1.51;
+..\BMI088\position.c(223): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      speed_xyz.y += speed_xyz_drift.y * 
+AMPLE_TIME*1.51;
+..\BMI088\position.c(224): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      speed_xyz.z += speed_xyz_drift.z * 
+AMPLE_TIME*1.51;
+..\BMI088\position.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=22428 RO-data=868 RW-data=168 ZI-data=2272  
+FromELF: creating hex file...
+"IIC_Test\IIC_Test.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,7 +64,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
