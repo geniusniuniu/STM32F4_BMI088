@@ -234,7 +234,8 @@ int main(void)
 		}
 	#endif
 		
-	PE_xyz = Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+	Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+//	printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
 //	printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\r\n", V3.x, V3.y, V3.z, PE_xyz.x, PE_xyz.y, PE_xyz.z);
 
   }

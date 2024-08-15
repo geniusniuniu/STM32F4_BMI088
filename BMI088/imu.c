@@ -1,18 +1,15 @@
 #include "imu.h"
 #include <math.h>
 
-// IMU 相关宏定义
-#define	_IMU_PI		  3.14159265f		
-#define	_IMU_Half_T	  0.005f         //表示四元数更新周期的一半，需要根据实际情况调整
-
 #define halfT 0.0085f
-float Kp = 10.0f;
-float Ki = 0.01f;
+
+float Kp = 1.5f;
+float Ki = 0.0008f;
 
 
-float gyro_x;
-float gyro_y;
-float gyro_z;
+volatile float gyro_x;
+volatile float gyro_y;
+volatile float gyro_z;
 double gyro_z1;
 float accel_x;
 float accel_y;
@@ -34,8 +31,6 @@ typedef struct
     float _delay_element_21;    // 延迟元素2  
 } LPF;
 
-float imu_Kp = 1.0f;
-float imu_Ki = 0.01f;
 
 Quaternion quart = {1.0f, 0.0f, 0.0f, 0.0f};
 
@@ -86,11 +81,11 @@ void AHRS(float gx,float gy,float gz,float ax,float ay,float az)
 	quart.q2 = quart.q2 * recipNorm;
 	quart.q3 = quart.q3 * recipNorm;
 
-	#ifndef POSITION_CALC	
+//	#ifdef POSITION_CALC	
 		Pitch = asinf(2 * quart.q1*quart.q3 - 2 * quart.q0*quart.q2) * 57.3f;
 		Roll  = atan2f(2 * quart.q2*quart.q3 + 2 * quart.q0*quart.q1, -2 * quart.q1*quart.q1 - 2 * quart.q2*quart.q2 + 1) * 57.3f;
 		//Yaw   = -atan2f(2 * q1*q2 + 2 * q0*q3, -2 * q2*q2 - 2 * q3*q3 + 1) * 57.3f;
-	#endif
+//	#endif
 		
 }
 

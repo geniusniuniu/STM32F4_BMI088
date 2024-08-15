@@ -22,17 +22,17 @@
 #define POSITION_CALC           1   
 
 //判断是否静止的阈值
-#define STATIONARY_THRESHOLD    0.1f
-
-
+#define STATIONARY_THRESHOLD    0.012f
 
 typedef char Flag;
+
+extern Vector3 position_xyz;
 
 Vector3 rotate_vector_by_quaternion(Vector3 v, Quaternion quart);
 
 void pos_Estimate_Init(void);
 // 位置估计函数
-Vector3 Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az);
+void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az);
 
 #endif
 

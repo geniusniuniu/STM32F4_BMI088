@@ -111,26 +111,20 @@ void pos_Estimate_Init(void)
     initLowPassFilter(&L_filter, FILTCUTOFF2, SAMPLE_FREQ);
 }
 
+Vector3 position_xyz;
 
 //位置估计函数
-Vector3 Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
+void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 {
-    // static float count_2s = 0;
-    // static float ax_mean = 0;
-    // static float ay_mean = 0;
-    // static float az_mean = 0;
-    // float sum_ax = 0;
-    // float sum_ay = 0;
-    // float sum_az = 0;
-//    printf("START!!!\r\n");
+    float acc_x, acc_y, acc_z;
+
     static float count_time = 0;
 
-    Vector3 rot_acc;
-    Vector3 speed_xyz;
-    Vector3 speed_xyz_last;
-    Vector3 speed_xyz_drift;
-    Vector3 speed_xyz_drift_last;
-    Vector3 position_xyz;
+    static Vector3 rot_acc;
+    static Vector3 speed_xyz;
+    static Vector3 speed_xyz_last;
+    static Vector3 speed_xyz_drift;
+    static Vector3 speed_xyz_drift_last;
 
     float acc_module;
 
@@ -150,47 +144,30 @@ Vector3 Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     acc_module = processLowPassFilter(&L_filter, acc_module);
 	
 	
-	
-	
-	
-//进行阈值检测，判断是否为静止状态
-/******************************************这块代码有问题******************************/
-if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三轴加速度判断ax等
+	//进行阈值检测，判断是否为静止状态
+	if(fabs(gx) < STATIONARY_THRESHOLD && fabs(gy) < STATIONARY_THRESHOLD && fabs(gz) < STATIONARY_THRESHOLD) 
     {
         stationary = 1;
     }
-
-	
-	
-    // //进行初始收敛，以获得IMU数据的姿态估计
-    // //稳定后的两秒的静态数据平均值作为后续的姿态估计的初始状态
-    // if(count_2s < 400)
-    // {
-    //     sum_ax += ax;
-    //     sum_ay += ay;
-    //     sum_az += az;
-    //     count_2s++;
-    // }
-    // else
-    // {
-    //     //计算队列中的数据的平均值
-    //     ax_mean = sum_ax / 400;
-    //     ay_mean = sum_ay / 400;
-    //     az_mean = sum_az / 400;
-
-    // }
-    
-    if(stationary == 0) //在静止状态下，对加速度计的输入更加敏感
+    else
     {
-        imu_Kp = 0;
+        stationary = 0;
+    }
+    
+    if(stationary == 1) //在静止状态下，对加速度计的输入更加敏感
+    {
+        Kp = 1.5;
     }
     else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
     {
-        imu_Kp = 5.1;
+        Kp = 0.0f;
     }
 
+    // acc_x = V3.x;
+    // acc_y = V3.y;
+    // acc_z = V3.z;
     //进行姿态解算，只用来获取四元数
-    AHRS(gx, gy, gz, ax, ay, az);
+    AHRS(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
 //	printf("%f,%f,%f,%f\r\n", quart.q0, quart.q1, quart.q2, quart.q3);
     rot_acc = rotate_vector_by_quaternion(V3, quart);
     rot_acc.z -= 1;
@@ -199,6 +176,7 @@ if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三�
     rot_acc.y *= GRAVITY;
     rot_acc.z *= GRAVITY;
 //	printf("%f,%f,%f\r\n", rot_acc.x, rot_acc.y, rot_acc.z);
+	
     //速度计算
     //速度 = 速度 + 加速度 * 时间间隔
     if(stationary == 0)
@@ -209,17 +187,10 @@ if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三�
     }
     else //静止状态速度为0
     {
-        speed_xyz.x = 0;
-        speed_xyz.y = 0;
-        speed_xyz.z = 0;
+        speed_xyz = (Vector3){0, 0, 0};
     }
 //    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 	
-	
-	
-	
-	
-	/*********************************漂移之后的数值不对劲************************/
     //对于非静止状态下的速度，计算漂移,把它从速度中移除
     if (stationary == 0) 
     {
@@ -230,9 +201,9 @@ if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三�
         speed_xyz_drift.z += speed_xyz.z;
         if(count_time == 10)   //每50ms更新一次 速度漂移率 = 速度 / 时间
         {
-            speed_xyz_drift.x = speed_xyz.x / 50;
-            speed_xyz_drift.y = speed_xyz.y / 50;
-            speed_xyz_drift.z = speed_xyz.z / 50;
+            speed_xyz_drift.x = speed_xyz.x / 10;
+            speed_xyz_drift.y = speed_xyz.y / 10;
+            speed_xyz_drift.z = speed_xyz.z / 10;
 
             speed_xyz_drift_last = speed_xyz_drift; 
             speed_xyz_drift = (Vector3){0, 0, 0};
@@ -240,25 +211,22 @@ if(acc_module < STATIONARY_THRESHOLD) //acc_module一直是 1.01，应改为三�
         }
     }
 
-//    //去除速度漂移
-//    speed_xyz.x -= speed_xyz_drift_last.x * SAMPLE_TIME;
-//    speed_xyz.y -= speed_xyz_drift_last.y * SAMPLE_TIME;
-//    speed_xyz.z -= speed_xyz_drift_last.z * SAMPLE_TIME;
+    //去除速度漂移
+    speed_xyz.x -= speed_xyz_drift_last.x * SAMPLE_TIME;
+    speed_xyz.y -= speed_xyz_drift_last.y * SAMPLE_TIME;
+    speed_xyz.z -= speed_xyz_drift_last.z * SAMPLE_TIME;
 	
 //    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 	
 	
-	
+	//位置计算
+    position_xyz.x += speed_xyz.x * SAMPLE_TIME;
+    position_xyz.y += speed_xyz.y * SAMPLE_TIME;
+    position_xyz.z += speed_xyz.z * SAMPLE_TIME;
+	printf("%f,%f,%f\r\n", position_xyz.x*10, position_xyz.y*10, position_xyz.z*10);
     
-//位置计算/**************************************为什么会自己清零？？？？**************************/
-    position_xyz.x += fabs(speed_xyz.x * SAMPLE_TIME);
-    position_xyz.y += fabs(speed_xyz.y * SAMPLE_TIME);
-    position_xyz.z += fabs(speed_xyz.z * SAMPLE_TIME);
-	printf("%f,%f,%f\r\n", position_xyz.x, position_xyz.y, position_xyz.z);
-    //更新速度
-    speed_xyz_last = speed_xyz;
-
-    return position_xyz;    
+	//更新速度
+    speed_xyz_last = speed_xyz;   
 }
 
 // 共轭四元数用于将向量旋转到原点的逆方向   
@@ -285,7 +253,7 @@ Quaternion quat_multiply(Quaternion quart1, Quaternion quart2)
 }
 
 
-// 使用四元数旋转向量
+//使用四元数旋转向量
 Vector3 rotate_vector_by_quaternion(Vector3 v3, Quaternion quart) 
 {
     // 将向量转换为四元数，w = 0

@@ -11,9 +11,9 @@
 
 #define THRESHOLD           0.6  // 角速率阈值 
 
-extern float gyro_x;
-extern float gyro_y;
-extern float gyro_z;
+extern volatile float gyro_x;
+extern volatile float gyro_y;
+extern volatile float gyro_z;
 extern double gyro_z1;
 extern float accel_x;
 extern float accel_y;
@@ -23,8 +23,7 @@ extern float Pitch;
 extern float Roll;
 extern float Yaw;
 
-extern float imu_Kp;
-extern float imu_Ki;
+extern float Kp;
 
 typedef struct {
     float q0;
