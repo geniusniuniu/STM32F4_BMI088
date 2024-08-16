@@ -28,20 +28,13 @@ Project File Date:  08/15/2024
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin'
 Build target 'IIC_Test'
 compiling position.c...
-..\BMI088\position.c(222): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      speed_xyz.x += speed_xyz_drift.x * 
-AMPLE_TIME*1.51;
-..\BMI088\position.c(223): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      speed_xyz.y += speed_xyz_drift.y * 
-AMPLE_TIME*1.51;
-..\BMI088\position.c(224): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      speed_xyz.z += speed_xyz_drift.z * 
-AMPLE_TIME*1.51;
-..\BMI088\position.c: 3 warnings, 0 errors
+..\BMI088\position.c(103): warning:  #550-D: variable "speed_xyz_drift"  was set but never used
+      static Vector3 speed_xyz_drift;
+..\BMI088\position.c: 1 warning, 0 errors
 linking...
-Program Size: Code=22428 RO-data=868 RW-data=168 ZI-data=2272  
+Program Size: Code=21732 RO-data=780 RW-data=184 ZI-data=2192  
 FromELF: creating hex file...
-"IIC_Test\IIC_Test.axf" - 0 Error(s), 3 Warning(s).
+"IIC_Test\IIC_Test.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

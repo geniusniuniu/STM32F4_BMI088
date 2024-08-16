@@ -45,14 +45,14 @@ struct bmi08x_dev dev = {
         .delay_ms = &HAL_Delay
 };
 
-volatile Vector3 V3;
+volatile Vector3 V3 = {0, 0, 0};
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断回调函数5ms一次
 {
 	static int count = 0;
 	static int count_delay = 0;
 	
-	#ifndef POSITION_CALC
+	#ifdef POSITION_CALC
 		static float gyro_bias_z;
 		static double gyro_ave_bias_z;
 		static int count1;
@@ -69,21 +69,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 		//读取加速度计数据
 		rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
 
-		#ifndef POSITION_CALC
-			//对加速度计数据进行窗口滤波
-			ACC_XYZ_Window_Filter(&user_accel_bmi088);
+		//对加速度计数据进行窗口滤波
+		ACC_XYZ_Window_Filter(&user_accel_bmi088);
 
-		#else
-
-			V3.x = user_accel_bmi088.x*ORIGIN_A;
-			V3.y = user_accel_bmi088.y*ORIGIN_A;
-			V3.z = user_accel_bmi088.z*ORIGIN_A;
-			
-		#endif
-
-		accel_x = user_accel_bmi088.x*A;
-		accel_y = user_accel_bmi088.y*A;
-		accel_z = user_accel_bmi088.z*A;
+		V3.x = user_accel_bmi088.x*A;
+		V3.y = user_accel_bmi088.y*A;
+		V3.z = user_accel_bmi088.z*A;
 
 		//读取陀螺仪数据
 		rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);
@@ -91,7 +82,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 		gyro_y = user_gyro_bmi088.y*B;
 		gyro_z = user_gyro_bmi088.z*B;
 				
-		#ifndef POSITION_CALC
+		#ifdef POSITION_CALC
 			gyro_z1 = (double)gyro_z * R2D;
 			
 			//对陀螺仪z轴数据进行窗口滤波
@@ -117,7 +108,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 					
 			//去除零偏之后积分出角度
 			Yaw += (double)gyro_z1*0.005;
-			//将角度限制在+-180度之间
+			//将角度限制在±180度之间
 			if(Yaw > 180)
 			{
 				Yaw -= 360;
@@ -238,8 +229,6 @@ int main(void)
 		
 	Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
 //	printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
-//	printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\r\n", V3.x, V3.y, V3.z, PE_xyz.x, PE_xyz.y, PE_xyz.z);
-
   }
 }
 

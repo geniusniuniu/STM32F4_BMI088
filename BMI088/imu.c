@@ -228,16 +228,16 @@ void ACC_XYZ_Window_Filter(struct bmi08x_sensor_data *ACC_xyz)  //对加速度�
 
 float Single_Window_Filter(float Sample) //窗口滤波函数
 {
-    static float filter_buf[FILTER_N_SINGLE + 1];
+    static float filter_buf[FILTER_N + 1];
     int i;    
     float filter_sum = 0;
-    filter_buf[FILTER_N_SINGLE] = Sample;
-    for(i = 0; i < FILTER_N_SINGLE; i++) 
+    filter_buf[FILTER_N] = Sample;
+    for(i = 0; i < FILTER_N; i++) 
     {
         filter_buf[i] = filter_buf[i + 1]; // 所有数据左移，低位仍掉
         filter_sum += filter_buf[i];
     }
-    return (float)(filter_sum / FILTER_N_SINGLE);
+    return (float)(filter_sum / FILTER_N);
 }
 
 static float invSqrt(float x) 		//快速计算 1/Sqrt(x)

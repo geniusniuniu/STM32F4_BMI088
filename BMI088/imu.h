@@ -5,14 +5,13 @@
 #include "bmi08x.h"
 #include "bmi088.h"
 
-#define FILTER_N            20
-#define FILTER_N_SINGLE     12
+#define FILTER_N            12
 #define M_PI_F              3.141592653589793
 
 #define THRESHOLD           0.6  // 角速率阈值 
 
 #define IMU_KP              5.0f  // 比例增益控制加速度计和磁力计的融合
-#define IMU_KI              0.01f  // 积分增益控制加速度计和磁力计的融合
+#define IMU_KI              0.005f  // 积分增益控制加速度计和磁力计的融合
 #define halfT               0.0085f
 
 extern volatile float gyro_x;

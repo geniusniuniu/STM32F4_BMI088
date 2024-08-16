@@ -3,13 +3,6 @@
 #include "usart.h"
 #include <stdio.h>
 /************************用于实现设计滤波器的相关代码***************************/
-typedef struct 
-{
-    double a0, a1, b1;  // 滤波器系数
-    double z1;          // 滤波器的前一输入值
-}Filter;
-
-Filter H_filter;
 
 // 定义滤波器系数结构体
 typedef struct 
@@ -20,47 +13,35 @@ typedef struct
     double prev_output;   // 保存前一个输出值
 }BW_Filter;
 
+BW_Filter H_filter;
 BW_Filter L_filter;
 
 // 初始化高通滤波器
-void initHighPassFilter(Filter* filter, double cutoffFreq, double sampleRate) 
+void initHighPassFilter(BW_Filter *coeffs, double filtCutOff, double sampleRate) 
 {
-    double theta = 2.0 * M_PI_F * cutoffFreq / sampleRate;
-    double gamma = cos(theta) / (1.0 + sin(theta));
+    double omega = 2.0 * M_PI_F * filtCutOff / sampleRate;
+    double tan_omega = tan(omega / 2.0);
 
-    filter->a0 = (1.0 + gamma) / 2.0;
-    filter->a1 = -(1.0 + gamma) / 2.0;
-    filter->b1 = gamma;
-    filter->z1 = 0.0;
+    // Calculate filter coefficients
+
+    double gain = 1.0 / (1.0 + tan_omega);
+    coeffs->a[0] = (tan_omega - 1) * gain;
+    coeffs->b[0] = gain;
+    coeffs->b[1] = -gain;
 }
 
 // 处理单个样本
-float processHighPassFilter(Filter* filter, float input) 
+float processHighPassFilter(BW_Filter *coeffs, float input) 
 {
-    float output = filter->a0*input + filter->a1*filter->z1 - filter->b1*filter->z1;
-    filter->z1 = input;
+    // Apply the difference equation for the high-pass filter
+    float output = coeffs->b[0]*input + coeffs->b[1]*(coeffs->prev_input) - coeffs->a[0]*(coeffs->prev_output);
+
+    // 更新历史输入和输出
+    coeffs->prev_input = input;
+    coeffs->prev_output = output;
+
     return output;
 }
-
-// 初始化低通滤波器
-//void initLowPassFilter(Filter* filter, double cutoffFreq, double sampleRate) 
-//{
-//    double theta = 2.0 *  M_PI_F * cutoffFreq / sampleRate;
-//    double d = 1.0 / (1.0 + sin(theta));
-//    filter->a0 = (1.0 - cos(theta)) * d / 2.0;
-//    filter->a1 = (1.0 - cos(theta)) * d / 2.0;
-//    filter->b1 = (1.0 - d) * (-1.0);
-//    filter->z1 = 0.0;
-//}
-
-
-// 处理单个样本
-//float processLowPassFilter(Filter* filter, float input) 
-//{
-//    float output = filter->a0*input + filter->a1*filter->z1 - filter->b1*filter->z1;
-//    filter->z1 = output;
-//    return output;
-//}
 
 
 void initLowPassFilter(BW_Filter *coeffs, double cutoffFreq, double sampleRate) 
@@ -81,7 +62,6 @@ void initLowPassFilter(BW_Filter *coeffs, double cutoffFreq, double sampleRate)
 float processLowPassFilter(BW_Filter *coeffs,float input) 
 {
     float output;
-
     // 计算当前输出
     output = coeffs->b[0] * input 
 				+ coeffs->b[1] * coeffs->prev_input 
@@ -94,10 +74,9 @@ float processLowPassFilter(BW_Filter *coeffs,float input)
     return output;
 }
 
+/************************上述用于实现设计滤波器的相关代码***************************/
 
 
-
-/************************用于实现设计滤波器的相关代码***************************/
 
 void q_conj(Quaternion *quart);
  
@@ -129,58 +108,34 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     Flag stationary = 0;  //静止标志位 1:静止 0:运动
 
     //计算加速度模值
-    acc_module = sqrt(ax * ax + ay * ay + az * az);
+    acc_module = sqrt(V3.x * V3.x + V3.y * V3.y + V3.z * V3.z);
 
-    //butterworth高通滤波
     //对加速度计数据进行高通滤波
-    acc_module = processHighPassFilter(&H_filter, acc_module);
+//    acc_module = processHighPassFilter(&H_filter, acc_module);
 
     //对数据取绝对值
     acc_module = fabs(acc_module);
-
-    //对加速幅值再次进行低通滤波，以减少高频噪声。
+    //对加速幅值进行低通滤波，以减少高频噪声。
     acc_module = processLowPassFilter(&L_filter, acc_module);
-	
-	
+
 	//进行阈值检测，判断是否为静止状态
-	if(fabs(gx) < STATIONARY_THRESHOLD && fabs(gy) < STATIONARY_THRESHOLD && fabs(gz) < STATIONARY_THRESHOLD) 
-    {
+	if(fabs(gx) < STATIONARY_THRESHOLD && fabs(gy) < STATIONARY_THRESHOLD && fabs(gz) < STATIONARY_THRESHOLD)
         stationary = 1;
-    }
     else
-    {
         stationary = 0;
-    }
-    
-    // if(stationary == 1) //在静止状态下，对加速度计的输入更加敏感
-    // {
-    //     Kp = IMU_KP;
-    // }
-    // else               //在动态状态下不依赖于加速度计的输入，主要依靠陀螺仪的数据
-    // {
-    //     Kp = 0.0f;
-    // }
 
-
-/****************************************************问题排查区间********************************************/
     //进行姿态解算，只用来获取四元数
-    AHRS(gyro_x, gyro_y, gyro_z, accel_x, accel_y, accel_z);//四元数计算基本没问题
-
+    AHRS(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);//四元数计算基本没问题
 //	printf("%f,%f,%f,%f\r\n", quart.q0, quart.q1, quart.q2, quart.q3);
-    rot_acc = rotate_vector_by_quaternion(V3, quart);
-    rot_acc.z -= 1;
 
+    //将四元数从载体坐标系旋转到世界坐标系
+    rot_acc = rotate_vector_by_quaternion(V3, quart);   //旋转后 载体->世界 
 
-/****************************************************问题排查区间**********************************************/
-
-
-//    rot_acc = (Vector3){0,0,1};
+    //去除重力加速度   
+    rot_acc.z -= GRAVITY; 
     
-    rot_acc.x *= GRAVITY;
-    rot_acc.y *= GRAVITY;
-    rot_acc.z *= GRAVITY;
 //	printf("%f,%f,%f\r\n", rot_acc.x, rot_acc.y, rot_acc.z);
-	
+
     //速度计算
     //速度 = 速度 + 加速度 * 时间间隔  单位：m/s
     if(stationary == 0)
@@ -193,12 +148,9 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     {
         speed_xyz = (Vector3){0, 0, 0};
     }
-    // printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
-	
-    //更新速度
-    speed_xyz_last = speed_xyz; 
+    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 
-    //对于非静止状态下的速度，计算漂移,把它从速度中移除
+   // 对于非静止状态下的速度，计算漂移,把它从速度中移除
     if (stationary == 0) 
     {
         count_time++;
@@ -218,20 +170,35 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
         }
     }
 
-    //去除速度漂移
-    speed_xyz.x += speed_xyz_drift.x * SAMPLE_TIME*1.51;
-    speed_xyz.y += speed_xyz_drift.y * SAMPLE_TIME*1.51;
-    speed_xyz.z += speed_xyz_drift.z * SAMPLE_TIME*1.51;
-	
-//    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
-	
-	
+    //去除速度漂移(需要区分正负)
+    // if(rot_acc.x > 0)
+    //     speed_xyz.x += speed_xyz_drift.x * SAMPLE_TIME*1.51f;
+    // else
+    //     speed_xyz.x -= speed_xyz_drift.x * SAMPLE_TIME*1.5f;
+
+    // if(rot_acc.y > 0)
+    //     speed_xyz.y += speed_xyz_drift.y * SAMPLE_TIME*1.51f;
+    // else
+    //     speed_xyz.y -= speed_xyz_drift.y * SAMPLE_TIME*1.5f;
+
+    // if(rot_acc.z > 0)
+    //     speed_xyz.z += speed_xyz_drift.z * SAMPLE_TIME*1.51f;
+    // else
+    //     speed_xyz.z -= speed_xyz_drift.z * SAMPLE_TIME*1.5f;
+		
+
 	//位置计算   单位：m
     position_xyz.x += speed_xyz.x * SAMPLE_TIME;
     position_xyz.y += speed_xyz.y * SAMPLE_TIME;
     position_xyz.z += speed_xyz.z * SAMPLE_TIME;
-	printf("%f,%f,%f\r\n", position_xyz.x*100, position_xyz.y*100, position_xyz.z*100); //    单位：cm
-      
+
+//	printf("%f,%f,%f\r\n",position_xyz.x*100, position_xyz.y*100, position_xyz.z*100); //    单位：cm  
+
+//    printf("%f,%f,%f\r\n",rot_acc.y, speed_xyz.y, position_xyz.y*100); 
+
+    //更新速度
+    speed_xyz_last = speed_xyz;  
+
 }
 
 // 共轭四元数用于将向量旋转到原点的逆方向   
@@ -261,12 +228,13 @@ Quaternion quat_multiply(Quaternion quart1, Quaternion quart2)
 //使用四元数旋转向量
 Vector3 rotate_vector_by_quaternion(Vector3 v3, Quaternion quart) 
 {
-    // 将向量转换为四元数，w = 0
+    // 将三维向量转换到四维
     Quaternion q_v = {0, v3.x, v3.y, v3.z};     
     // 共轭四元数
     Quaternion q_conj = quat_conj(quart);
     // 矩阵相乘 v′ = q⋅v⋅q* 
-    Quaternion q_result = quat_multiply(quat_multiply(quart, q_v), q_conj);
+    Quaternion temp = quat_multiply(quart, q_v); //首先计算 q * v  
+    Quaternion q_result = quat_multiply(temp, q_conj);// 然后计算 (q * v_q) * q*
 
     // 返回旋转后的向量
     Vector3 v_rotated;

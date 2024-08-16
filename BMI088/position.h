@@ -22,7 +22,7 @@
 #define POSITION_CALC           1   
 
 //判断是否静止的阈值
-#define STATIONARY_THRESHOLD    0.012f
+#define STATIONARY_THRESHOLD    0.02f
 
 typedef char Flag;
 
