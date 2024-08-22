@@ -1,0 +1,16 @@
+iic_test\mpl.o: ..\DMP\mllite\mpl.c
+iic_test\mpl.o: ..\DMP\mllite\storage_manager.h
+iic_test\mpl.o: ..\DMP\driver\include\mltypes.h
+iic_test\mpl.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stddef.h
+iic_test\mpl.o: ..\DMP\driver\include\log.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdlib.h
+iic_test\mpl.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdarg.h
+iic_test\mpl.o: ..\DMP\mllite\mpl.h
+iic_test\mpl.o: ..\DMP\mllite\start_manager.h
+iic_test\mpl.o: ..\DMP\mllite\data_builder.h
+iic_test\mpl.o: ..\DMP\mllite\results_holder.h
+iic_test\mpl.o: ..\DMP\driver\include\mlinclude.h

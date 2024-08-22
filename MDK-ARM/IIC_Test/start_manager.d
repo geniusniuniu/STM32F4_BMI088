@@ -1,0 +1,11 @@
+iic_test\start_manager.o: ..\DMP\mllite\start_manager.c
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\string.h
+iic_test\start_manager.o: ..\DMP\driver\include\log.h
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdlib.h
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdarg.h
+iic_test\start_manager.o: ..\DMP\mllite\start_manager.h
+iic_test\start_manager.o: ..\DMP\driver\include\mltypes.h
+iic_test\start_manager.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\start_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h

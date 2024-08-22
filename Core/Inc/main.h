@@ -1,6 +1,21 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+#include "sys.h"
+#include "delay.h"
+
+#include <stdio.h>
+#include "math.h"
+
+#include "bmi08x.h"
+#include "bmi088.h"
+#include "imu.h"
+
+#include "myiic.h"
+#include "mpu9250.h"
+#include "inv_mpu.h"
+#include "inv_mpu_dmp_motion_driver.h" 
+
 
 
 //程序运行状态指示灯PA6

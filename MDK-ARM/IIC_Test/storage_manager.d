@@ -1,0 +1,15 @@
+iic_test\storage_manager.o: ..\DMP\mllite\storage_manager.c
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\string.h
+iic_test\storage_manager.o: ..\DMP\mllite\storage_manager.h
+iic_test\storage_manager.o: ..\DMP\driver\include\mltypes.h
+iic_test\storage_manager.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stddef.h
+iic_test\storage_manager.o: ..\DMP\driver\include\log.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdlib.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdarg.h
+iic_test\storage_manager.o: ..\DMP\mllite\ml_math_func.h
+iic_test\storage_manager.o: ..\DMP\driver\include\mlmath.h
+iic_test\storage_manager.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\math.h

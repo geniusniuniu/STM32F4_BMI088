@@ -1,0 +1,11 @@
+iic_test\ml_math_func.o: ..\DMP\mllite\ml_math_func.c
+iic_test\ml_math_func.o: ..\DMP\driver\include\mlmath.h
+iic_test\ml_math_func.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\math.h
+iic_test\ml_math_func.o: ..\DMP\mllite\ml_math_func.h
+iic_test\ml_math_func.o: ..\DMP\driver\include\mltypes.h
+iic_test\ml_math_func.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\ml_math_func.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\ml_math_func.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\ml_math_func.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h
+iic_test\ml_math_func.o: ..\DMP\driver\include\mlinclude.h
+iic_test\ml_math_func.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\string.h

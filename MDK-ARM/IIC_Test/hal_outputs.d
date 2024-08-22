@@ -1,0 +1,17 @@
+iic_test\hal_outputs.o: ..\DMP\mllite\hal_outputs.c
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\string.h
+iic_test\hal_outputs.o: ..\DMP\mllite\hal_outputs.h
+iic_test\hal_outputs.o: ..\DMP\driver\include\mltypes.h
+iic_test\hal_outputs.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h
+iic_test\hal_outputs.o: ..\DMP\driver\include\log.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdlib.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdarg.h
+iic_test\hal_outputs.o: ..\DMP\mllite\ml_math_func.h
+iic_test\hal_outputs.o: ..\DMP\driver\include\mlmath.h
+iic_test\hal_outputs.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\math.h
+iic_test\hal_outputs.o: ..\DMP\mllite\start_manager.h
+iic_test\hal_outputs.o: ..\DMP\mllite\data_builder.h
+iic_test\hal_outputs.o: ..\DMP\mllite\results_holder.h

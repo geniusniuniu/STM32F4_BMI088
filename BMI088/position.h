@@ -19,7 +19,7 @@
     POSITION_CALC 1: 通过加速度计计算位置
     POSITION_CALC 0: 通过四元数计算角度
 */
-#define POSITION_CALC           1   
+#define POSITION_CALC             
 
 //判断是否静止的阈值
 #define STATIONARY_THRESHOLD    0.02f

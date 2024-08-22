@@ -169,7 +169,6 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
             count_time = 0;
         }
     }
-
     //去除速度漂移(需要区分正负)
     // if(rot_acc.x > 0)
     //     speed_xyz.x += speed_xyz_drift.x * SAMPLE_TIME*1.51f;

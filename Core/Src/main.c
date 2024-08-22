@@ -1,36 +1,21 @@
-/******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************/
-
 #include "main.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include <stdio.h>
-#include <math.h>
-#include "bmi08x.h"
-#include "bmi088.h"
-#include "imu.h"
-#include "position.h"
 
+#include "position.h"
 
 /***************************************各类函数声明****************************************/
 void SystemClock_Config(void);
 int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
 int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
+void BMI088_InitFuc(void);
+void MPU9250_InitFuc(void);
 
+/*****************************各类变量定义**********************************/
 
-int fputc(int ch, FILE *f) //printf重定向
-{
-	uint8_t temp[1] = {ch};
-	HAL_UART_Transmit(&huart1, temp, 1, 2);//
-	return ch;
-}
-
-////////////////////////////////////////////各类变量定义/////////////////////////////////////////////////
-int8_t rslt;    //用来记录IMU初始化状态
+int8_t IMU_Res;//记录IMU初始化状态
 uint8_t data = 0;
 
 struct bmi08x_sensor_data user_accel_bmi088;
@@ -47,7 +32,57 @@ struct bmi08x_dev dev = {
 
 volatile Vector3 V3 = {0, 0, 0};
 int t = 0;			//t用来控制串口输出频率	改为100ms输出一次
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断回调函数5ms一次
+u8 device_id;
+u8 MPU_Res;
+
+/*****************************主函数*******************************/
+
+int main(void)
+{
+	HAL_Init();
+	SystemClock_Config();
+	delay_init(168);
+	
+	MX_GPIO_Init();
+	MX_I2C1_Init();
+	SoftSim_IIC_Init();
+	//其他相关函数的参数初始化
+	LPF2_ParamSet(50, 8);
+	pos_Estimate_Init();
+
+	MX_USART1_UART_Init();
+	MX_TIM2_Init();
+	HAL_TIM_Base_Start_IT(&htim2);
+	
+/**********************************BMI088初始化相关*******************************************/
+	BMI088_InitFuc();	
+/***************************MPU9250初始化相关*******************************************/	
+	MPU9250_InitFuc();
+	
+	while(1)
+	{
+		MPU_Res = mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
+		Temp_9AX = MPU_Get_Temperature();//得到温度值（扩大了100倍）
+		if(MPU_Res == 0)
+			printf("%.2f,%.2f,%.2f,%d\r\n",Pitch_9AX,Roll_9AX,Yaw_9AX,Temp_9AX); 
+ 		
+		delay_ms(10);
+	}
+	
+	while (1)//位置估计 + BMI088角度解算
+	{	   
+	//printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 		
+		Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+	//printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
+	}
+  
+  
+  
+}
+
+/*************************TIM2 中断回调函数 5ms一次******************************/
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	
 {
 	static int count = 0;
 	static int count_delay = 0;
@@ -67,7 +102,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 			return;
 		}
 		//读取加速度计数据
-		rslt = bmi08a_get_data(&user_accel_bmi088, &dev);
+		IMU_Res = bmi08a_get_data(&user_accel_bmi088, &dev);
 
 		//对加速度计数据进行窗口滤波
 		ACC_XYZ_Window_Filter(&user_accel_bmi088);
@@ -77,7 +112,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 		V3.z = user_accel_bmi088.z*A;
 
 		//读取陀螺仪数据
-		rslt = bmi08g_get_data(&user_gyro_bmi088, &dev);
+		IMU_Res = bmi08g_get_data(&user_gyro_bmi088, &dev);
 		gyro_x = user_gyro_bmi088.x*B;
 		gyro_y = user_gyro_bmi088.y*B;
 		gyro_z = user_gyro_bmi088.z*B;
@@ -123,7 +158,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 		t++;
 		if(t >= 20)
 		{
-			printf("%f,%f,%f\r\n",-Pitch,Roll,Yaw);  
+			//printf("%f,%f,%f\r\n",-Pitch,Roll,Yaw);  
 			t = 0;
 		}
 			
@@ -137,109 +172,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 }
 
 
-////////////////////////////////////////////主函数/////////////////////////////////////////////////
-
-
-Vector3 PE_xyz = {0, 0, 0};
-
-int main(void)
+//printf重定向
+int fputc(int ch, FILE *f) 
 {
-	HAL_Init();
-	SystemClock_Config();
-
-	MX_GPIO_Init();
-	MX_I2C1_Init();
-	
-	//其他相关函数的参数初始化
-	LPF2_ParamSet(50, 8);
-	pos_Estimate_Init();
-
-	MX_USART1_UART_Init();
-	MX_TIM2_Init();
-
-	HAL_TIM_Base_Start_IT(&htim2);
-	
-/////////////////////////////////////BMI088初始化相关//////////////////////////////////////////
-	rslt = bmi088_init(&dev);
-	
-	if(rslt == BMI08X_OK) 
-	{
-		/* Read accel chip id */
-		rslt = bmi08a_get_regs(BMI08X_ACCEL_CHIP_ID_REG, &data, 1, &dev);
-		if(rslt == BMI08X_OK) 
-		{
-			/* Read gyro chip id */
-			rslt = bmi08g_get_regs(BMI08X_GYRO_CHIP_ID_REG, &data, 1, &dev);
-			printf("GYRO Initialization OK\n\r");
-			printf("GYRO Chip ID: 0x%02X\n\r",data);
-		}
-	}
-	else
-	{
-		printf("BMI088 Initialization Error\n\r");
-		while(1);
-	}
-	
-	/* Perform soft reset */
-	rslt = bmi08a_soft_reset(&dev);
-	if (rslt != BMI08X_OK)
-	{
-		printf("BMI088 Soft Reset Error\n\r");
-		while(1);
-	}
-	/* Read the accel power mode */
-	rslt = bmi08a_get_power_mode(&dev);
-	/* Read the accel sensor config parameters (odr,bw,range) */
-	rslt = bmi08a_get_meas_conf(&dev);
-	/* Initialize the device instance as per the initialization example */
-
-	/* Assign the desired configurations */
-	dev.accel_cfg.bw = BMI08X_ACCEL_BW_NORMAL;
-	dev.accel_cfg.odr = BMI08X_ACCEL_ODR_200_HZ;
-	dev.accel_cfg.range = BMI088_ACCEL_RANGE_24G;
-	dev.accel_cfg.power = BMI08X_ACCEL_PM_ACTIVE;
-	
-	rslt = bmi08a_set_power_mode(&dev);
-	
-	/* Wait for 10ms to switch between the power modes - delay taken care inside the function */
-	rslt = bmi08a_set_meas_conf(&dev);
-		
-	/* Configuring the gyro	 */
-	dev.gyro_cfg.power = BMI08X_GYRO_PM_NORMAL;
-	
-	rslt = bmi08g_set_power_mode(&dev);
-	/* Wait for 30ms to switch between the power modes - delay taken care inside the function */
-	
-	/* Assign the desired configurations */
-	dev.gyro_cfg.odr = BMI08X_GYRO_BW_23_ODR_200_HZ;
-	dev.gyro_cfg.range = BMI08X_GYRO_RANGE_1000_DPS;
-	dev.gyro_cfg.bw = BMI08X_GYRO_BW_23_ODR_200_HZ;
-	
-	rslt = bmi08g_set_meas_conf(&dev);
-	   
-/////////////////////////////////////BMI088初始化相关//////////////////////////////////////////
-	
-  while (1)
-  {	   
-    //printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 
-	#ifndef POSITION_CALC
-    	AHRS(gyro_x,gyro_y,gyro_z,accel_x,accel_y,accel_z);	
-		HAL_Delay(10);
-		t++;
-		if(t == 1)
-		{
-			printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
-			t = 0;
-		}
-	#endif
-		
-	Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
-
-  }
+	uint8_t temp[1] = {ch};
+	HAL_UART_Transmit(&huart1, temp, 1, 2);//
+	return ch;
 }
-
-
-
 
 
 /********************************I2C相关函数*********************************************/
@@ -260,7 +199,68 @@ int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_
 
 
 
+/*******************************BMI088初始化相关*******************************************/
+void BMI088_InitFuc(void)
+{
+	IMU_Res = bmi088_init(&dev);	
+	if(IMU_Res == BMI08X_OK) 
+	{
+		IMU_Res = bmi08a_get_regs(BMI08X_ACCEL_CHIP_ID_REG, &data, 1, &dev);
+		if(IMU_Res == BMI08X_OK) 
+		{
+			IMU_Res = bmi08g_get_regs(BMI08X_GYRO_CHIP_ID_REG, &data, 1, &dev);
+		}
+	}
+	else
+	{
+		printf("BMI088 Initial Not OK!!!\r\n");
+		while(1);
+	}
+	IMU_Res = bmi08a_soft_reset(&dev);
+	if (IMU_Res != BMI08X_OK)
+	{
+		printf("BMI088 RESET Not OK!!!\r\n");
+		while(1);
+	}
+	IMU_Res = bmi08a_get_power_mode(&dev);
+	IMU_Res = bmi08a_get_meas_conf(&dev);
+	dev.accel_cfg.bw = BMI08X_ACCEL_BW_NORMAL;
+	dev.accel_cfg.odr = BMI08X_ACCEL_ODR_200_HZ;
+	dev.accel_cfg.range = BMI088_ACCEL_RANGE_24G;
+	dev.accel_cfg.power = BMI08X_ACCEL_PM_ACTIVE;
+	IMU_Res = bmi08a_set_power_mode(&dev);
+	IMU_Res = bmi08a_set_meas_conf(&dev);
+	dev.gyro_cfg.power = BMI08X_GYRO_PM_NORMAL;	
+	IMU_Res = bmi08g_set_power_mode(&dev);
+	dev.gyro_cfg.odr = BMI08X_GYRO_BW_23_ODR_200_HZ;
+	dev.gyro_cfg.range = BMI08X_GYRO_RANGE_1000_DPS;
+	dev.gyro_cfg.bw = BMI08X_GYRO_BW_23_ODR_200_HZ;	
+	IMU_Res = bmi08g_set_meas_conf(&dev);
+	printf("BMI088 Initial OK!!!\r\n");
+}
 
+
+
+void MPU9250_InitFuc(void)
+{
+	MPU_Res = MPU_Read_Len(MPU9250_ADDR, MPU_DEVICE_ID_REG, 1, &device_id);
+	if(MPU_Res) 
+	{
+		printf("1\r\n");
+		while(1);
+	}
+	if(device_id != MPU6500_ID) 
+	{
+		printf("2\r\n");
+		while(1);
+	}
+	MPU_Res = mpu_dmp_init();
+	if(MPU_Res) 
+	{
+		printf("%d\r\n",MPU_Res);
+		while(1);
+	} 	 
+}
 
 
 

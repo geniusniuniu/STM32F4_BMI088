@@ -1,0 +1,10 @@
+iic_test\message_layer.o: ..\DMP\mllite\message_layer.c
+iic_test\message_layer.o: ..\DMP\mllite\message_layer.h
+iic_test\message_layer.o: ..\DMP\driver\include\mltypes.h
+iic_test\message_layer.o: ..\DMP\driver\include\stdint_invensense.h
+iic_test\message_layer.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdint.h
+iic_test\message_layer.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\errno.h
+iic_test\message_layer.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\limits.h
+iic_test\message_layer.o: ..\DMP\driver\include\log.h
+iic_test\message_layer.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdlib.h
+iic_test\message_layer.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\stdarg.h
