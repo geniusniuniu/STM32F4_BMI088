@@ -126,7 +126,7 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
 
     //进行姿态解算，只用来获取四元数
     AHRS(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);//四元数计算基本没问题
-//	printf("%f,%f,%f,%f\r\n", quart.q0, quart.q1, quart.q2, quart.q3);
+//	printf("%f %f %f %f", quart.q0, quart.q1, quart.q2, quart.q3);
 
     //将四元数从载体坐标系旋转到世界坐标系
     rot_acc = rotate_vector_by_quaternion(V3, quart);   //旋转后 载体->世界 
@@ -134,7 +134,7 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     //去除重力加速度   
     rot_acc.z -= GRAVITY; 
     
-//	printf("%f,%f,%f\r\n", rot_acc.x, rot_acc.y, rot_acc.z);
+//	printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\r\n", rot_acc.x, rot_acc.y, rot_acc.z,gyro_x, gyro_y, gyro_z);
 
     //速度计算
     //速度 = 速度 + 加速度 * 时间间隔  单位：m/s
@@ -148,7 +148,7 @@ void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az)
     {
         speed_xyz = (Vector3){0, 0, 0};
     }
-    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
+//    printf("%f,%f,%f\r\n", speed_xyz.x, speed_xyz.y, speed_xyz.z);
 
    // 对于非静止状态下的速度，计算漂移,把它从速度中移除
     if (stationary == 0) 

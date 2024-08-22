@@ -3,17 +3,17 @@
         {
             "name": "IIC_Test",
             "includePath": [
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Core\\Inc",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Inc",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Include",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\BMI088",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Core\\Inc",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Inc",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\Legacy",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Device\\ST\\STM32F4xx\\Include",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\CMSIS\\Include",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\BMI088",
                 "D:\\keil5\\keil5_MDK\\keil5_MDK_32\\ARM\\ARMCC\\include",
                 "D:\\keil5\\keil5_MDK\\keil5_MDK_32\\ARM\\ARMCC\\include\\rw",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\MDK-ARM",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Core\\Src",
-                "c:\\Users\\gyy\\Desktop\\位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Src"
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\MDK-ARM",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Core\\Src",
+                "d:\\AAA位置标定项目\\STM32F4_Test\\IIC_Test\\Drivers\\STM32F4xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

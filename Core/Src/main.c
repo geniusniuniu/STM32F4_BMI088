@@ -46,7 +46,7 @@ struct bmi08x_dev dev = {
 };
 
 volatile Vector3 V3 = {0, 0, 0};
-
+int t = 0;			//t用来控制串口输出频率	改为100ms输出一次
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断回调函数5ms一次
 {
 	static int count = 0;
@@ -119,8 +119,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 				Yaw += 360;
 				Yaw_turn--;
 			}
-		#endif
-		
+		#endif		
+		t++;
+		if(t >= 20)
+		{
+			printf("%f,%f,%f\r\n",-Pitch,Roll,Yaw);  
+			t = 0;
+		}
+			
 		count++;
 		if(count == 50)
 		{
@@ -133,7 +139,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	//定时器2中断�
 
 ////////////////////////////////////////////主函数/////////////////////////////////////////////////
 
-int t = 0;	//t用来控制串口输出频率	改为100ms输出一次
+
 Vector3 PE_xyz = {0, 0, 0};
 
 int main(void)
@@ -228,7 +234,7 @@ int main(void)
 	#endif
 		
 	Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
-//	printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
+
   }
 }
 
