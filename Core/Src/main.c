@@ -11,7 +11,7 @@ void SystemClock_Config(void);
 int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
 int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
 void BMI088_InitFuc(void);
-void MPU9250_InitFuc(void);
+void MPU9250_DMP_InitFuc(void);
 
 /*****************************各类变量定义**********************************/
 
@@ -29,6 +29,12 @@ struct bmi08x_dev dev = {
         .write = &stm32_i2c_write, 
         .delay_ms = &HAL_Delay
 };
+
+
+float Pitch_9AX,Roll_9AX,Yaw_9AX;	//欧拉角
+short Temp_9AX;                     //温度
+
+
 
 volatile Vector3 V3 = {0, 0, 0};
 int t = 0;			//t用来控制串口输出频率	改为100ms输出一次
@@ -54,33 +60,27 @@ int main(void)
 	MX_TIM2_Init();
 	HAL_TIM_Base_Start_IT(&htim2);
 	
-/**********************************BMI088初始化相关*******************************************/
+/*************************** BMI088 初始化相关 *******************************************/
 	BMI088_InitFuc();	
-/***************************MPU9250初始化相关*******************************************/	
-	MPU9250_InitFuc();
+/*************************** MPU9250初始化相关 *******************************************/	
+	MPU9250_DMP_InitFuc();	
 	
-	while(1)
-	{
-		MPU_Res = mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
-		Temp_9AX = MPU_Get_Temperature();//得到温度值（扩大了100倍）
-		if(MPU_Res == 0)
-			printf("%.2f,%.2f,%.2f,%d\r\n",Pitch_9AX,Roll_9AX,Yaw_9AX,Temp_9AX); 
- 		
-		delay_ms(10);
-	}
 	
 	while (1)//位置估计 + BMI088角度解算
 	{	   
-	//printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 		
+		//printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 	
+		//printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);		
+		
+		
+		mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
 		Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
-	//printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);
-	}
-  
-  
+		//Temp_9AX = MPU_Get_Temperature();//得到MPU9250的温度值（扩大了100倍）
+	} 
   
 }
 
-/*************************TIM2 中断回调函数 5ms一次******************************/
+
+/************************* TIM2 中断回调函数 5ms一次 ******************************/
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	
 {
@@ -101,6 +101,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			count_delay++;
 			return;
 		}
+		
 		//读取加速度计数据
 		IMU_Res = bmi08a_get_data(&user_accel_bmi088, &dev);
 
@@ -156,9 +157,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			}
 		#endif		
 		t++;
+
 		if(t >= 20)
 		{
-			//printf("%f,%f,%f\r\n",-Pitch,Roll,Yaw);  
+			printf("6Axis:%f,%f,%f\r\n",-Pitch,Roll,Yaw); 
+			printf("9Axis:%.2f,%.2f,%.2f\r\n"/*,%d\r\n"*/,Pitch_9AX,Roll_9AX,Yaw_9AX/*,Temp_9AX*/); 
+			
 			t = 0;
 		}
 			
@@ -241,23 +245,19 @@ void BMI088_InitFuc(void)
 
 
 
-void MPU9250_InitFuc(void)
+void MPU9250_DMP_InitFuc(void)
 {
 	MPU_Res = MPU_Read_Len(MPU9250_ADDR, MPU_DEVICE_ID_REG, 1, &device_id);
 	if(MPU_Res) 
 	{
-		printf("1\r\n");
+		printf("Read Error:%d\r\n",MPU_Res);
 		while(1);
 	}
-	if(device_id != MPU6500_ID) 
-	{
-		printf("2\r\n");
-		while(1);
-	}
+
 	MPU_Res = mpu_dmp_init();
 	if(MPU_Res) 
 	{
-		printf("%d\r\n",MPU_Res);
+		printf("DMP Error:%d\r\n",MPU_Res);
 		while(1);
 	} 	 
 }

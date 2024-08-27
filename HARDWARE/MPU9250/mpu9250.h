@@ -3,8 +3,6 @@
 #include "sys.h"
 
 
-extern float Pitch_9AX,Roll_9AX,Yaw_9AX;	//欧拉角
-extern short Temp_9AX;                     //温度
 
 //如果AD0脚(9脚)接地,IIC地址为0X68(不包含最低位).
 //如果接V3.3,则IIC地址为0X69(不包含最低位).
@@ -109,4 +107,5 @@ short MPU_Get_Temperature(void);
 u8 MPU_Get_Gyroscope(short *gx,short *gy,short *gz);
 u8 MPU_Get_Accelerometer(short *ax,short *ay,short *az);
 u8 MPU_Get_Magnetometer(short *mx,short *my,short *mz);
+
 #endif

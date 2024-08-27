@@ -3417,7 +3417,7 @@ u8 mpu_dmp_init(void)
 		if(res)return 2; 
 		res=mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL);   //设置FIFO
 		if(res)return 3; 
-		res=mpu_set_sample_rate(DEFAULT_MPU_HZ);	            //设置采样率
+		res=mpu_set_sample_rate(MY_DEF_MPU_HZ);	            	//设置采样率
 		if(res)return 4; 
         res=mpu_set_compass_sample_rate(1000/COMPASS_READ_MS);  //设置磁力计采样率
         if(res)return 5;
@@ -3444,10 +3444,13 @@ u8 mpu_dmp_init(void)
 		    DMP_FEATURE_ANDROID_ORIENT|DMP_FEATURE_SEND_RAW_ACCEL|DMP_FEATURE_SEND_CAL_GYRO|
 		    DMP_FEATURE_GYRO_CAL);
 		if(res)return 8; 
-		res=dmp_set_fifo_rate(DEFAULT_MPU_HZ);	//设置DMP输出速率(最大不超过200Hz)
+		res=dmp_set_fifo_rate(MY_DEF_MPU_HZ);	//设置DMP输出速率(最大不超过200Hz)
 		if(res)return 9;   
+		
 		res=run_self_test();		//自检
 		if(res)return 10;    
+		
+		
 		res=mpu_set_dmp_state(1);	//使能DMP
 		if(res)return 11;     
 	} 

@@ -50,6 +50,9 @@ typedef struct {
 
 extern volatile Vector3 V3;
 
+extern float Pitch_9AX,Roll_9AX,Yaw_9AX;	//欧拉角
+extern short Temp_9AX;                     //温度
+
 #ifdef __cplusplus
 }
 #endif

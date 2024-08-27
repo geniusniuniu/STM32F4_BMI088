@@ -614,11 +614,6 @@
               <FilePath>..\DMP\mllite\hal_outputs.c</FilePath>
             </File>
             <File>
-              <FileName>message_layer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DMP\mllite\message_layer.c</FilePath>
-            </File>
-            <File>
               <FileName>ml_math_func.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DMP\mllite\ml_math_func.c</FilePath>
@@ -652,6 +647,11 @@
               <FileName>libmpllib.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\DMP\mpl\libmpllib.lib</FilePath>
+            </File>
+            <File>
+              <FileName>message_layer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DMP\mllite\message_layer.c</FilePath>
             </File>
           </Files>
         </Group>

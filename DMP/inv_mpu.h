@@ -24,7 +24,9 @@
 
 //定义输出速度
 #define DEFAULT_MPU_HZ  (100)		//100Hz
-#define COMPASS_READ_MS (100)
+#define MY_DEF_MPU_HZ  	(100)		//100hz
+
+#define COMPASS_READ_MS (10)		//100hz
 
 #define INV_X_GYRO      (0x40)
 #define INV_Y_GYRO      (0x20)
@@ -143,5 +145,6 @@ u8 run_self_test(void);
 u8 mpu_dmp_init(void);
 u8 mpu_dmp_get_data(float *pitch,float *roll,float *yaw);
 u8 mpu_mpl_get_data(float *pitch,float *roll,float *yaw);
+
 #endif  /* #ifndef _INV_MPU_H_ */
 

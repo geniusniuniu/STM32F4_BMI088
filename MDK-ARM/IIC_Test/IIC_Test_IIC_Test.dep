@@ -1,8 +1,8 @@
 Dependencies for Project 'IIC_Test', Target 'IIC_Test': (DO NOT MODIFY !)
 CompilerVersion: 5060528::V5.06 update 5 (build 528)::ARMCC
 F (startup_stm32f407xx.s)(0x66AF09D0)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o iic_test\startup_stm32f407xx.o --depend iic_test\startup_stm32f407xx.d)
-F (../Core/Src/main.c)(0x66C76536)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\main.o --omf_browse iic_test\main.crf --depend iic_test\main.d)
-I (../Core/Inc/main.h)(0x66C75A37)
+F (../Core/Src/main.c)(0x66CD88CC)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\main.o --omf_browse iic_test\main.crf --depend iic_test\main.d)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -45,8 +45,8 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 I (../Core/Inc/i2c.h)(0x66ADF692)
 I (../Core/Inc/tim.h)(0x66ADFCA4)
@@ -55,7 +55,7 @@ I (../Core/Inc/gpio.h)(0x66ADF692)
 I (..\BMI088\position.h)(0x66C76120)
 F (..\BMI088\imu.c)(0x66BECC88)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\imu.o --omf_browse iic_test\imu.crf --depend iic_test\imu.d)
 I (..\BMI088\imu.h)(0x66BEE5C6)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -97,13 +97,13 @@ I (..\BMI088\bmi08x_defs.h)(0x5EB55132)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (..\BMI088\imu.h)(0x66BEE5C6)()
 F (../Core/Src/gpio.c)(0x66ADFCA4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\gpio.o --omf_browse iic_test\gpio.crf --depend iic_test\gpio.d)
 I (../Core/Inc/gpio.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -146,12 +146,12 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (../Core/Src/i2c.c)(0x66ADF692)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\i2c.o --omf_browse iic_test\i2c.crf --depend iic_test\i2c.d)
 I (../Core/Inc/i2c.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -194,12 +194,12 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (../Core/Src/tim.c)(0x66B4760E)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\tim.o --omf_browse iic_test\tim.crf --depend iic_test\tim.d)
 I (../Core/Inc/tim.h)(0x66ADFCA4)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -242,12 +242,12 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (../Core/Src/usart.c)(0x66AF09CE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\usart.o --omf_browse iic_test\usart.crf --depend iic_test\usart.d)
 I (../Core/Inc/usart.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -290,8 +290,8 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (..\BMI088\bmi08a.c)(0x5E1D9C66)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\bmi08a.o --omf_browse iic_test\bmi08a.crf --depend iic_test\bmi08a.d)
 I (..\BMI088\bmi08x.h)(0x5E1D9C66)
@@ -313,7 +313,7 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stddef.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 F (../Core/Src/stm32f4xx_it.c)(0x66AF09CE)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\stm32f4xx_it.o --omf_browse iic_test\stm32f4xx_it.crf --depend iic_test\stm32f4xx_it.d)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -356,12 +356,12 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 I (../Core/Inc/stm32f4xx_it.h)(0x66AF09CE)
 F (../Core/Src/stm32f4xx_hal_msp.c)(0x66ADF692)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\stm32f4xx_hal_msp.o --omf_browse iic_test\stm32f4xx_hal_msp.crf --depend iic_test\stm32f4xx_hal_msp.d)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -404,14 +404,14 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (..\BMI088\position.c)(0x66C75AE7)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\position.o --omf_browse iic_test\position.crf --depend iic_test\position.d)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
 I (..\BMI088\position.h)(0x66C76120)
 I (..\BMI088\imu.h)(0x66BEE5C6)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -452,8 +452,8 @@ I (..\BMI088\bmi08x_defs.h)(0x5EB55132)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 I (../Core/Inc/usart.h)(0x66ADF692)
 F (..\BMI088\position.h)(0x66C76120)()
@@ -1084,13 +1084,13 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
-F (..\DMP\inv_mpu.c)(0x66C763E3)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\inv_mpu.o --omf_browse iic_test\inv_mpu.crf --depend iic_test\inv_mpu.d)
+F (..\DMP\inv_mpu.c)(0x66CD8312)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\inv_mpu.o --omf_browse iic_test\inv_mpu.crf --depend iic_test\inv_mpu.d)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdio.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdint.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdlib.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\string.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -1158,21 +1158,21 @@ I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
 I (..\SYSTEM\delay\delay.h)(0x63BEDEDD)
 I (../Core/Inc/usart.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\BMI088\bmi08x.h)(0x5E1D9C66)
 I (..\BMI088\bmi08x_defs.h)(0x5EB55132)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-F (..\DMP\inv_mpu.h)(0x66C7052C)()
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+F (..\DMP\inv_mpu.h)(0x66CD8312)()
 F (..\DMP\inv_mpu_dmp_motion_driver.c)(0x66C702D2)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\inv_mpu_dmp_motion_driver.o --omf_browse iic_test\inv_mpu_dmp_motion_driver.crf --depend iic_test\inv_mpu_dmp_motion_driver.d)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdio.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdint.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdlib.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\string.h)(0x588B8344)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
@@ -1208,7 +1208,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 I (..\DMP\dmpKey.h)(0x63BEDEDD)
 I (..\DMP\dmpmap.h)(0x63BEDEDD)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
 F (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)()
 F (..\DMP\driver\stm32L\log_stm32.c)(0x63BEDEDD)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\log_stm32.o --omf_browse iic_test\log_stm32.crf --depend iic_test\log_stm32.d)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdio.h)(0x588B8344)
@@ -1254,7 +1254,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 I (../Core/Inc/usart.h)(0x66ADF692)
-I (../Core/Inc/main.h)(0x66C75A37)
+I (../Core/Inc/main.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (..\SYSTEM\delay\delay.h)(0x63BEDEDD)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
@@ -1264,8 +1264,8 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdbool.h)(0x588B8344)
 I (..\BMI088\bmi088.h)(0x5E1D9C66)
 I (..\BMI088\imu.h)(0x66BEE5C6)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
-I (..\DMP\inv_mpu.h)(0x66C7052C)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
+I (..\DMP\inv_mpu.h)(0x66CD8312)
 I (..\DMP\inv_mpu_dmp_motion_driver.h)(0x66C702D2)
 F (..\DMP\eMPL-hal\eMPL_outputs.c)(0x66C7045E)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\empl_outputs.o --omf_browse iic_test\empl_outputs.crf --depend iic_test\empl_outputs.d)
 I (..\DMP\eMPL-hal\eMPL_outputs.h)(0x63BEDEDD)
@@ -1316,16 +1316,6 @@ I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
 I (..\DMP\mllite\start_manager.h)(0x63BEDEDD)
 I (..\DMP\mllite\data_builder.h)(0x63BEDEDD)
 I (..\DMP\mllite\results_holder.h)(0x63BEDEDD)
-F (..\DMP\mllite\message_layer.c)(0x63BEDEDD)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\message_layer.o --omf_browse iic_test\message_layer.crf --depend iic_test\message_layer.d)
-I (..\DMP\mllite\message_layer.h)(0x63BEDEDD)
-I (..\DMP\driver\include\mltypes.h)(0x66C75B76)
-I (..\DMP\driver\include\stdint_invensense.h)(0x63BEDEDD)
-I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdint.h)(0x588B8344)
-I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\errno.h)(0x588B8344)
-I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\limits.h)(0x588B8344)
-I (..\DMP\driver\include\log.h)(0x63BEDEDD)
-I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdlib.h)(0x588B8344)
-I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdarg.h)(0x588B8344)
 F (..\DMP\mllite\ml_math_func.c)(0x63BEDEDD)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\ml_math_func.o --omf_browse iic_test\ml_math_func.crf --depend iic_test\ml_math_func.d)
 I (..\DMP\driver\include\mlmath.h)(0x63BEDEDD)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
@@ -1399,6 +1389,16 @@ I (..\DMP\mllite\ml_math_func.h)(0x63BEDEDD)
 I (..\DMP\driver\include\mlmath.h)(0x63BEDEDD)
 I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\math.h)(0x588B8344)
 F (..\DMP\mpl\libmpllib.lib)(0x63BEDEDD)()
+F (..\DMP\mllite\message_layer.c)(0x63BEDEDD)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\message_layer.o --omf_browse iic_test\message_layer.crf --depend iic_test\message_layer.d)
+I (..\DMP\mllite\message_layer.h)(0x63BEDEDD)
+I (..\DMP\driver\include\mltypes.h)(0x66C75B76)
+I (..\DMP\driver\include\stdint_invensense.h)(0x63BEDEDD)
+I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\errno.h)(0x588B8344)
+I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\limits.h)(0x588B8344)
+I (..\DMP\driver\include\log.h)(0x63BEDEDD)
+I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdlib.h)(0x588B8344)
+I (D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\include\stdarg.h)(0x588B8344)
 F (..\HARDWARE\IIC\myiic.c)(0x66C75D49)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\myiic.o --omf_browse iic_test\myiic.crf --depend iic_test\myiic.d)
 I (..\HARDWARE\IIC\myiic.h)(0x66C75D49)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
@@ -1435,8 +1435,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x66AE08E4)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66AE08E4)
 I (..\SYSTEM\delay\delay.h)(0x63BEDEDD)
-F (..\HARDWARE\MPU9250\mpu9250.c)(0x66C76536)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\mpu9250.o --omf_browse iic_test\mpu9250.crf --depend iic_test\mpu9250.d)
-I (..\HARDWARE\MPU9250\mpu9250.h)(0x66C76385)
+F (..\HARDWARE\MPU9250\mpu9250.c)(0x66CD8312)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\BMI088 -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\HARDWARE\IIC -I ..\HARDWARE\MPU9250 -I ..\DMP\driver\eMPL -I ..\DMP\driver\include -I ..\DMP\driver\stm32L -I ..\DMP\eMPL-hal -I ..\DMP\mllite -I ..\DMP\mpl -I ..\DMP-I.\RTE\_IIC_Test-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-ID:\keil5\keil5_MDK\keil5_MDK_32\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o iic_test\mpu9250.o --omf_browse iic_test\mpu9250.crf --depend iic_test\mpu9250.d)
+I (..\HARDWARE\MPU9250\mpu9250.h)(0x66CD8348)
 I (..\SYSTEM\sys\sys.h)(0x63BEDEDD)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x66AE08E2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x66AE08E2)
