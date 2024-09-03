@@ -51,20 +51,17 @@ int main(void)
 {
 	Init_All();		
 /************************************** IMU初始化 ***************************************/
-	BMI088_InitFunc();		
-	MPU9250_DMP_InitFunc();	
+//	BMI088_InitFunc();		
+//	MPU9250_DMP_InitFunc();	
 /************************************** TOF初始化 ***************************************/	
 	VL53L0x_InitFunc();
 	while (1)//位置估计 + BMI088角度解算
 	{	   
 		//printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 	
-		//printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);		
-		
-		
-		mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
+		//printf("%.2f,%.2f,%.2f\r\n",-Pitch,Roll,Yaw);				
 		Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
 		//HAL_Delay(100);
-		//vl53l0x_test();
+		vl53l0x_test();
 		//Temp_9AX = MPU_Get_Temperature();//得到MPU9250的温度值（扩大了100倍）
 	} 
   
@@ -73,7 +70,6 @@ int main(void)
 
 
 /****************************** TIM2 中断回调函数 5ms一次 ********************************/
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	
 {
 	static int count = 0;
@@ -152,9 +148,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		if(t >= 20)
 		{
-			printf("6Axis:%f,%f,%f\r\n",-Pitch,Roll,Yaw); 
-			printf("9Axis:%.2f,%.2f,%.2f\r\n",Pitch_9AX,Roll_9AX,Yaw_9AX); 
-			
+			printf("6Axis:%f,%f,%f\r\n",-Pitch,Roll,Yaw); 			
 			t = 0;
 		}
 			
@@ -167,6 +161,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) 
+{
+	static int exti_count = 0;
+	if(GPIO_Pin == GPIO_PIN_2) 
+	{
+		exti_count++;
+		mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
+		if(exti_count >= 10)
+		{
+			printf("9Axis:%.2f,%.2f,%.2f\r\n",Pitch_9AX,Roll_9AX,Yaw_9AX);
+			exti_count = 0;
+		}
+	}
+}
 
 /***********************************BMI088初始化相关***************************************/
 void BMI088_InitFunc(void)
@@ -334,16 +343,21 @@ void Init_All(void)
 	MX_GPIO_Init();
 	XShut_PinInit();
 	
-	//初始化三个不同的IIC接口
-	MX_I2C1_Init();
-	SoftSim_IIC_Init();
-	VL53L0X_i2c_init();	
-	
 	//外设初始化
 	MX_USART1_UART_Init();
 	MX_TIM2_Init();
 	HAL_TIM_Base_Start_IT(&htim2);
 	
+	//初始化三个不同的IIC接口
+	MX_I2C1_Init();
+	SoftSim_IIC_Init();
+	VL53L0X_i2c_init();	
+	
+	BMI088_InitFunc();
+	MPU9250_DMP_InitFunc();
+	printf("123\r\n");
+	exti_GPIO_Init();
+		
 	//相关函数的参数初始化
 	LPF2_ParamSet(50, 8);
 	Pos_Filter_Init();

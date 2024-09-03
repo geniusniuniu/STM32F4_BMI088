@@ -28,8 +28,11 @@ Project File Date:  09/03/2024
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin'
 Build target 'IIC_Test'
 compiling main.c...
+../Core/Src/main.c(313): warning:  #550-D: variable "result"  was set but never used
+  	uint16_t* result = NULL;
+../Core/Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=72880 RO-data=4224 RW-data=1072 ZI-data=9168  
+Program Size: Code=73472 RO-data=4224 RW-data=1076 ZI-data=9260  
 FromELF: creating hex file...
 After Build - User command #1: D:\AAA位置标定项目\STM32F4_Test\IIC_Test\MDK-ARM\Keil5_disp_size_bar_v0.3.exe
 [Keil5_disp_size_bar V0.3]: start find map file
@@ -37,11 +40,11 @@ After Build - User command #1: D:\AAA位置标定项目\STM32F4_Test\IIC_Test\MDK-ARM\
 [Keil5_disp_size_bar V0.3]: found end
 ram:
    64 KB   ram1:|____________________|  0.00 % (    0.00 KB /    64.00 KB) [65536 B]
-  128 KB   ram2:|■___________________|  7.81 % (   10.00 KB /   128.00 KB) [120832 B]
+  128 KB   ram2:|■___________________|  7.89 % (   10.09 KB /   128.00 KB) [120736 B]
 flash:
-  512 KB flash1:|■■__________________| 14.71 % (   75.30 KB /   512.00 KB) [447184 B]
+  512 KB flash1:|■■__________________| 14.82 % (   75.88 KB /   512.00 KB) [446592 B]
  
-"IIC_Test\IIC_Test.axf" - 0 Error(s), 0 Warning(s).
+"IIC_Test\IIC_Test.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

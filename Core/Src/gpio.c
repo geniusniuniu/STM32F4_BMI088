@@ -57,9 +57,22 @@ void MX_GPIO_Init(void)
 	
     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_6,GPIO_PIN_SET);	//PA6ÖÃ1 ,Ãð
     HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_SET);	//PA7ÖÃ1 ,Ãð
-
+	
+	
 }
 
-/* USER CODE BEGIN 2 */
 
-/* USER CODE END 2 */
+void exti_GPIO_Init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct1;
+	
+	/*Configure GPIO pin : PA2 */
+	GPIO_InitStruct1.Pin = GPIO_PIN_2;
+	GPIO_InitStruct1.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct1.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct1);
+
+	/* EXTI interrupt init*/
+	HAL_NVIC_SetPriority(EXTI2_IRQn, 1, 0);
+	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+}
