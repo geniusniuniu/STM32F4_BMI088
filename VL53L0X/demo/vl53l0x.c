@@ -227,12 +227,12 @@ VL53L0X_Error vl53l0x_init(VL53L0X_Dev_t *dev,char Xshut_Pin)
 
 
 //获取一次测量距离数据
-void One_measurement()
-{
-	VL53L0X_PerformSingleRangingMeasurement(&vl53l0x_dev[0],&vl53l0x_data);	
-	printf("%4d\r\n",vl53l0x_data.RangeMilliMeter);
-		
-}
+//void One_measurement()
+//{
+//	VL53L0X_PerformSingleRangingMeasurement(&vl53l0x_dev[0],&vl53l0x_data[0]);	
+//	printf("%4d\r\n",vl53l0x_data.RangeMilliMeter);
+//		
+//}
 
 
 //----------以下函数为USMART调用------------//

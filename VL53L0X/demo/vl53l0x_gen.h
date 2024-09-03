@@ -16,7 +16,7 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 
-extern VL53L0X_RangingMeasurementData_t vl53l0x_data;
+extern VL53L0X_RangingMeasurementData_t vl53l0x_data[3];
 extern uint16_t Distance_data[3];//±£´æ²â¾àÊý¾Ý
 
 VL53L0X_Error vl53l0x_set_mode(VL53L0X_Dev_t *dev,u8 mode);

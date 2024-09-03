@@ -1,7 +1,7 @@
 #include "vl53l0x_gen.h"
 #include "GPIO.h"
 
-VL53L0X_RangingMeasurementData_t vl53l0x_data;//测距测量结构体
+VL53L0X_RangingMeasurementData_t vl53l0x_data[3];//测距测量结构体
 uint16_t Distance_data[3] = {0};//保存测距数据
 
 //VL53L0X 测量模式配置

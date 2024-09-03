@@ -3398,7 +3398,7 @@ u8 mpu_dmp_init(void)
     unsigned short gyro_rate, gyro_fsr;
     unsigned short compass_fsr;
     
-	SoftSim_IIC_Init(); 		        //初始化IIC总线
+//	SoftSim_IIC_Init(); 		        //初始化IIC总线
 	if(mpu_init(&int_param)==0)	//初始化MPU9250
 	{	 
 //		printf("MPU_DMP Init Succeed\r\n");

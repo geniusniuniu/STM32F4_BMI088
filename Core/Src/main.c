@@ -16,6 +16,7 @@ void MPU9250_DMP_InitFunc(void);
 void VL53L0x_InitFunc(void);
 void vl53l0x_test(void);
 void SystemClock_Config(void);
+uint16_t* Filter_Window(uint16_t* Dis);
 /***************************************各类变量定义****************************************/
 
 int8_t IMU_Res;//记录IMU初始化状态
@@ -62,7 +63,8 @@ int main(void)
 		
 		mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
 		Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
-		vl53l0x_test();
+		//HAL_Delay(100);
+		//vl53l0x_test();
 		//Temp_9AX = MPU_Get_Temperature();//得到MPU9250的温度值（扩大了100倍）
 	} 
   
@@ -164,18 +166,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 	}
 }
-
-
-//printf重定向
-int fputc(int ch, FILE *f) 
-{
-	uint8_t temp[1] = {ch};
-	HAL_UART_Transmit(&huart1, temp, 1, 2);//
-	return ch;
-}
-
-
-
 
 
 /***********************************BMI088初始化相关***************************************/
@@ -302,38 +292,35 @@ void VL53L0x_InitFunc(void)
 	
 	if(VL53L0X_ERROR_NONE == vl53l0x_set_mode(&vl53l0x_dev[Axis_Z],Default_Mode)) 
 		printf("Zaxis_VL53L0X MODE SET OK\r\n");
-//	vl53l0x_test();//vl53l0x测试（死循环）
 
 }
 
 //VL53L0X测试程序
 void vl53l0x_test(void)
 {   
-	 u8 i=0;
-	 VL53L0X_Error status = 0; 
-	 static char buf[VL53L0X_MAX_STRING_LENGTH];//测试模式字符串字符缓冲区
-	 uint16_t* result = NULL;
-	 while(1)
-	 {		  	 
-		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_X],Axis_X,&vl53l0x_data,buf);
-		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Y],Axis_Y,&vl53l0x_data,buf);
-		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Z],Axis_Z,&vl53l0x_data,buf);
-		//result = Filter_Window(Distance_data);
-		 
-		if(status == VL53L0X_ERROR_NONE)
-		{
-			printf("%d,%d,%d\r\n",Distance_data[Axis_X],Distance_data[Axis_Y],Distance_data[Axis_Z]);
-		}
-		else
-			printf("Status:%d\r\n",status);	
-		
-		i++;
-		if(i==5)	//闪灯
-		{			 
-			LED1 =! LED1;
-			i = 0;
-		} 
-	 }
+	u8 i=0;
+	VL53L0X_Error status = 0; 
+	static char buf[VL53L0X_MAX_STRING_LENGTH];//测试模式字符串字符缓冲区
+	uint16_t* result = NULL;
+		  	 
+	status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_X],Axis_X,&vl53l0x_data[Axis_X],buf);
+	status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Y],Axis_Y,&vl53l0x_data[Axis_Y],buf);
+	status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Z],Axis_Z,&vl53l0x_data[Axis_Z],buf);
+	result = Filter_Window(Distance_data);
+	 
+	if(status == VL53L0X_ERROR_NONE)
+	{
+		printf("%d,%d,%d\r\n",Distance_data[Axis_X],Distance_data[Axis_Y],Distance_data[Axis_Z]);
+	}
+	else
+		printf("Status:%d\r\n",status);	
+	
+	i++;
+	if(i==5)	//闪灯
+	{			 
+		LED1 =! LED1;
+		i = 0;
+	} 
 }
 
 void Init_All(void)
@@ -362,6 +349,26 @@ void Init_All(void)
 	Pos_Filter_Init();
 }
 
+uint16_t* Filter_Window(uint16_t* Dis) 
+{
+    static uint16_t filter_buf[3][FILTER_N + 1] = {0};
+    int i = 0,j = 0;    
+    uint16_t filter_sum[3] = {0};
+    filter_buf[0][FILTER_N] = Dis[0];
+	filter_buf[1][FILTER_N] = Dis[1];
+	filter_buf[2][FILTER_N] = Dis[2];
+	
+    for(j = 0; j < 3;j++)
+	{
+		for(i = 0; i < FILTER_N; i++) 
+		{
+			filter_buf[j][i] = filter_buf[j][i + 1]; 	//�����������ƣ���λ�Ե�
+			filter_sum[j] += filter_buf[j][i];
+		}
+		Dis[j] = (uint16_t)(filter_sum[j] / FILTER_N);
+	}
+    return Dis;
+}
 
 
 /**
