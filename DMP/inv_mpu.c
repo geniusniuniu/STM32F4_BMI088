@@ -44,7 +44,7 @@
  *      unsigned char length, unsigned char const *data)
  * i2c_read(unsigned char slave_addr, unsigned char reg_addr,
  *      unsigned char length, unsigned char *data)
- * delay_ms(unsigned long num_ms)
+ * HAL_Delay(unsigned long num_ms)
  * get_ms(unsigned long *count)
  * reg_int_cb(void (*cb)(void), unsigned char port, unsigned char pin)
  * labs(long x)
@@ -58,7 +58,7 @@ unsigned char *mpl_key = (unsigned char*)"eMPL 5.1";
 
 #define i2c_write   MPU_Write_Len
 #define i2c_read    MPU_Read_Len
-#define delay_ms    delay_ms
+//#define HAL_Delay    HAL_Delay
 #define get_ms      mget_ms
 
 #define log_i       printf  //打印信息
@@ -72,7 +72,7 @@ unsigned char *mpl_key = (unsigned char*)"eMPL 5.1";
 #include "msp430_interrupt.h"
 #define i2c_write   msp430_i2c_write
 #define i2c_read    msp430_i2c_read
-#define delay_ms    msp430_delay_ms
+#define HAL_Delay    msp430_HAL_Delay
 #define get_ms      msp430_get_clock_ms
 static inline int reg_int_cb(struct int_param_s *int_param)
 {
@@ -93,7 +93,7 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 #include "log.h"
 #define i2c_write   msp430_i2c_write
 #define i2c_read    msp430_i2c_read
-#define delay_ms    msp430_delay_ms
+#define HAL_Delay    msp430_HAL_Delay
 #define get_ms      msp430_get_clock_ms
 static inline int reg_int_cb(struct int_param_s *int_param)
 {
@@ -118,7 +118,7 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 #include "uc3l0_clock.h"
 #define i2c_write(a, b, c, d)   twi_write(a, b, d, c)
 #define i2c_read(a, b, c, d)    twi_read(a, b, d, c)
-/* delay_ms is a function already defined in ASF. */
+/* HAL_Delay is a function already defined in ASF. */
 #define get_ms  uc3l0_get_clock_ms
 static inline int reg_int_cb(struct int_param_s *int_param)
 {
@@ -738,7 +738,7 @@ int mpu_init(struct int_param_s *int_param)
     data[0] = BIT_RESET;
     if (i2c_write(st.hw->addr, st.reg->pwr_mgmt_1, 1, data))
         return -1;
-    delay_ms(100);
+    HAL_Delay(100);
 
     /* Wake up chip. */
     data[0] = 0x00;
@@ -1159,7 +1159,7 @@ int mpu_reset_fifo(void)
         data = BIT_FIFO_RST | BIT_DMP_RST;
         if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, &data))
             return -1;
-        delay_ms(50);
+        HAL_Delay(50);
         data = BIT_DMP_EN | BIT_FIFO_EN;
         if (st.chip_cfg.sensors & INV_XYZ_COMPASS)
             data |= BIT_AUX_IF_EN;
@@ -1184,7 +1184,7 @@ int mpu_reset_fifo(void)
             data = BIT_FIFO_EN | BIT_AUX_IF_EN;
         if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, &data))
             return -1;
-        delay_ms(50);
+        HAL_Delay(50);
         if (st.chip_cfg.int_enable)
             data = BIT_DATA_RDY_EN;
         else
@@ -1708,7 +1708,7 @@ int mpu_set_sensors(unsigned char sensors)
 
     st.chip_cfg.sensors = sensors;
     st.chip_cfg.lp_accel_mode = 0;
-    delay_ms(50);
+    HAL_Delay(50);
     return 0;
 }
 
@@ -1878,7 +1878,7 @@ int mpu_set_bypass(unsigned char bypass_on)
         tmp &= ~BIT_AUX_IF_EN;
         if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, &tmp))
             return -1;
-        delay_ms(3);
+        HAL_Delay(3);
         tmp = BIT_BYPASS_EN;
         if (st.chip_cfg.active_low_int)
             tmp |= BIT_ACTL;
@@ -1896,7 +1896,7 @@ int mpu_set_bypass(unsigned char bypass_on)
             tmp &= ~BIT_AUX_IF_EN;
         if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, &tmp))
             return -1;
-        delay_ms(3);
+        HAL_Delay(3);
         if (st.chip_cfg.active_low_int)
             tmp = BIT_ACTL;
         else
@@ -2044,7 +2044,7 @@ static int compass_self_test(void)
         goto AKM_restore;
 
     do {
-        delay_ms(10);
+        HAL_Delay(10);
         if (i2c_read(st.chip_cfg.compass_addr, AKM_REG_ST1, 1, tmp))
             goto AKM_restore;
         if (tmp[0] & AKM_DATA_READY)
@@ -2098,7 +2098,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     data[1] = 0;
     if (i2c_write(st.hw->addr, st.reg->pwr_mgmt_1, 2, data))
         return -1;
-    delay_ms(200);
+    HAL_Delay(200);
     data[0] = 0;
     if (i2c_write(st.hw->addr, st.reg->int_enable, 1, data))
         return -1;
@@ -2113,7 +2113,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     data[0] = BIT_FIFO_RST | BIT_DMP_RST;
     if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, data))
         return -1;
-    delay_ms(15);
+    HAL_Delay(15);
     data[0] = st.test->reg_lpf;
     if (i2c_write(st.hw->addr, st.reg->lpf, 1, data))
         return -1;
@@ -2134,7 +2134,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     if (i2c_write(st.hw->addr, st.reg->accel_cfg, 1, data))
         return -1;
     if (hw_test)
-        delay_ms(200);
+        HAL_Delay(200);
 
     /* Fill FIFO for test.wait_ms milliseconds. */
     data[0] = BIT_FIFO_EN;
@@ -2144,7 +2144,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     data[0] = INV_XYZ_GYRO | INV_XYZ_ACCEL;
     if (i2c_write(st.hw->addr, st.reg->fifo_en, 1, data))
         return -1;
-    delay_ms(test.wait_ms);
+    HAL_Delay(test.wait_ms);
     data[0] = 0;
     if (i2c_write(st.hw->addr, st.reg->fifo_en, 1, data))
         return -1;
@@ -2439,7 +2439,7 @@ static int get_st_6500_biases(long *gyro, long *accel, unsigned char hw_test, in
     data[1] = 0;
     if (i2c_write(st.hw->addr, st.reg->pwr_mgmt_1, 2, data))
         return -1;
-    delay_ms(200);
+    HAL_Delay(200);
     data[0] = 0;
     if (i2c_write(st.hw->addr, st.reg->int_enable, 1, data))
         return -1;
@@ -2454,7 +2454,7 @@ static int get_st_6500_biases(long *gyro, long *accel, unsigned char hw_test, in
     data[0] = BIT_FIFO_RST | BIT_DMP_RST;
     if (i2c_write(st.hw->addr, st.reg->user_ctrl, 1, data))
         return -1;
-    delay_ms(15);
+    HAL_Delay(15);
     data[0] = st.test->reg_lpf;
     if (i2c_write(st.hw->addr, st.reg->lpf, 1, data))
         return -1;
@@ -2475,7 +2475,7 @@ static int get_st_6500_biases(long *gyro, long *accel, unsigned char hw_test, in
     if (i2c_write(st.hw->addr, st.reg->accel_cfg, 1, data))
         return -1;
 
-    delay_ms(test.wait_ms);  //wait 200ms for sensors to stabilize
+    HAL_Delay(test.wait_ms);  //wait 200ms for sensors to stabilize
 
     /* Enable FIFO */
     data[0] = BIT_FIFO_EN;
@@ -2494,7 +2494,7 @@ static int get_st_6500_biases(long *gyro, long *accel, unsigned char hw_test, in
 
     //start reading samples
     while (s < test.packet_thresh) {
-    	delay_ms(test.sample_wait_ms); //wait 10ms to fill FIFO
+    	HAL_Delay(test.sample_wait_ms); //wait 10ms to fill FIFO
 		if (i2c_read(st.hw->addr, st.reg->fifo_count_h, 2, data))
 			return -1;
 		fifo_count = (data[0] << 8) | data[1];
@@ -2973,12 +2973,12 @@ static int setup_compass(void)
     data[0] = AKM_POWER_DOWN;
     if (i2c_write(st.chip_cfg.compass_addr, AKM_REG_CNTL, 1, data))
         return -1;
-    delay_ms(1);
+    HAL_Delay(1);
 
     data[0] = AKM_FUSE_ROM_ACCESS;
     if (i2c_write(st.chip_cfg.compass_addr, AKM_REG_CNTL, 1, data))
         return -1;
-    delay_ms(1);
+    HAL_Delay(1);
 
     /* Get sensitivity adjustment data from fuse ROM. */
     if (i2c_read(st.chip_cfg.compass_addr, AKM_REG_ASAX, 3, data))
@@ -2990,7 +2990,7 @@ static int setup_compass(void)
     data[0] = AKM_POWER_DOWN;
     if (i2c_write(st.chip_cfg.compass_addr, AKM_REG_CNTL, 1, data))
         return -1;
-    delay_ms(1);
+    HAL_Delay(1);
 
     mpu_set_bypass(0);
 
@@ -3401,7 +3401,7 @@ u8 mpu_dmp_init(void)
 	SoftSim_IIC_Init(); 		        //初始化IIC总线
 	if(mpu_init(&int_param)==0)	//初始化MPU9250
 	{	 
-		printf("mpu init succeed\r\n");
+//		printf("MPU_DMP Init Succeed\r\n");
         res=inv_init_mpl();     //初始化MPL
         if(res)return 1;
         inv_enable_quaternion();
@@ -3447,8 +3447,13 @@ u8 mpu_dmp_init(void)
 		res=dmp_set_fifo_rate(MY_DEF_MPU_HZ);	//设置DMP输出速率(最大不超过200Hz)
 		if(res)return 9;   
 		
-		res=run_self_test();		//自检
-		if(res)return 10;    
+//		res=run_self_test();		//自检
+//		if(res)
+//		{
+////		You have enabled the self-test function,Or you can comment this function
+//			printf("PUT THE MPU WITH ITS Z_Axis UPWARD \r\n");
+//			return 10; 
+//		}   
 		
 		
 		res=mpu_set_dmp_state(1);	//使能DMP

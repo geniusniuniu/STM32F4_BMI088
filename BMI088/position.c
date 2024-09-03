@@ -81,7 +81,7 @@ float processLowPassFilter(BW_Filter *coeffs,float input)
 void q_conj(Quaternion *quart);
  
 
-void pos_Estimate_Init(void)
+void Pos_Filter_Init(void)
 {
     //初始化高通滤波器参数
     initHighPassFilter(&H_filter, FILTCUTOFF1, SAMPLE_FREQ);

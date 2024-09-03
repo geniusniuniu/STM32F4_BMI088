@@ -111,6 +111,22 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   }
 }
 
+
+
+/***************************************I2CÏà¹Øº¯Êı***************************************/
+int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
+{
+	HAL_I2C_Mem_Write(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
+	while(HAL_I2C_GetState(&hi2c1) == HAL_I2C_STATE_BUSY);
+	return 0;
+}
+
+int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
+{	
+	HAL_I2C_Mem_Read(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
+	return 0;
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

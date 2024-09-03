@@ -17,11 +17,6 @@
 #include "inv_mpu_dmp_motion_driver.h" 
 
 
-
-//程序运行状态指示灯PA6
-#define LED_PIN 		GPIO_PIN_6  								
-#define LED_PORT 		GPIOA  
-
 #define ORIGIN_A		0.000732421875								//原始加速度计数据 （24/32768）
 #define A 				0.007177734375f								//将原始加速度计数据转换成m/s^2
 //加速度原始数据转换成m/s^2
@@ -29,7 +24,9 @@
 #define B 				0.00053263221801584764920766930190693f		//原始陀螺仪数据转 单位（rad/s）
 #define R2D 			180.0f/M_PI_F								//弧度转角度
 
-
+#define TOF_X_ADDR	0x56
+#define TOF_Y_ADDR	0x5A	//VL53L0x的地址0x5b不可用！！！
+#define TOF_Z_ADDR	0x5C
 
 
 #ifdef __cplusplus

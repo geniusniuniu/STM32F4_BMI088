@@ -190,40 +190,7 @@ void ACC_XYZ_Window_Filter(struct bmi08x_sensor_data *ACC_xyz)  //对加速度�
     ACC_xyz->z = filtered_z;   
 } 
 
-////对陀螺仪数据进行滑动窗口滤波
-//void GYRO_XYZ_Window_Filter(struct bmi08x_sensor_data *GYRO_xyz)  
-//{  
-//    static int index = 0; // 用于记录最近写入的位置  
-//    static float filter_buf_x[FILTER_N + 1]; // X轴滤波缓冲区  
-//    static float filter_buf_y[FILTER_N + 1]; // Y轴滤波缓冲区  
-//    static float filter_buf_z[FILTER_N + 1]; // Z轴滤波缓冲区  
-//    // 将新数据写入到缓冲区并更新  
-//    filter_buf_x[index] = GYRO_xyz->x;  
-//    filter_buf_y[index] = GYRO_xyz->y;  
-//    filter_buf_z[index] = GYRO_xyz->z;  
 
-//    // 更新索引，循环使用  
-//    index = (index + 1) % FILTER_N;  
-
-//    // 计算每个方向的滤波值  
-//    float sum_x = 0, sum_y = 0, sum_z = 0;  
-//    for (int i = 0; i < FILTER_N; i++)  
-//    {  
-//        sum_x += filter_buf_x[i];  
-//        sum_y += filter_buf_y[i];  
-//        sum_z += filter_buf_z[i];  
-//    }  
-
-//    // 得到滤波后的值  
-//    float filtered_x = sum_x / FILTER_N;  
-//    float filtered_y = sum_y / FILTER_N;  
-//    float filtered_z = sum_z / FILTER_N;  
-
-//    // 更新原始结构体数据  
-//    GYRO_xyz->x = filtered_x;   
-//    GYRO_xyz->y = filtered_y;  
-//    GYRO_xyz->z = filtered_z;   
-//}
 
 
 float Single_Window_Filter(float Sample) //窗口滤波函数
@@ -239,6 +206,7 @@ float Single_Window_Filter(float Sample) //窗口滤波函数
     }
     return (float)(filter_sum / FILTER_N);
 }
+
 
 static float invSqrt(float x) 		//快速计算 1/Sqrt(x)
 {

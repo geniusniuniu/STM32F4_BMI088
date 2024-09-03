@@ -30,7 +30,7 @@ extern Vector3 position_xyz;
 
 Vector3 rotate_vector_by_quaternion(Vector3 v, Quaternion quart);
 
-void pos_Estimate_Init(void);
+void Pos_Filter_Init(void);
 // 位置估计函数
 void Pos_Estimate(float gx, float gy, float gz, float ax, float ay, float az);
 

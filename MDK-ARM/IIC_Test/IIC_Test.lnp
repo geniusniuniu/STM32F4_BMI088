@@ -49,6 +49,16 @@
 "iic_test\mpu9250.o"
 "iic_test\delay.o"
 "iic_test\sys.o"
+"iic_test\vl53l0x_api.o"
+"iic_test\vl53l0x_api_calibration.o"
+"iic_test\vl53l0x_api_core.o"
+"iic_test\vl53l0x_api_ranging.o"
+"iic_test\vl53l0x_api_strings.o"
+"iic_test\vl53l0x_i2c.o"
+"iic_test\vl53l0x_platform.o"
+"iic_test\vl53l0x.o"
+"iic_test\vl53l0x_cali.o"
+"iic_test\vl53l0x_gen.o"
 --library_type=microlib --strict --scatter "IIC_Test\IIC_Test.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

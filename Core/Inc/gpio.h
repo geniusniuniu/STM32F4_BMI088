@@ -28,6 +28,16 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#define LED0 PAout(6)   //LED0
+#define LED1 PAout(7)   //LED1
+
+//程序运行状态指示灯PA6,PA7
+#define LED_PIN_1 		GPIO_PIN_6  
+#define LED_PIN_2 		GPIO_PIN_7 
+#define LED_PORT 		GPIOA  
+
+
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

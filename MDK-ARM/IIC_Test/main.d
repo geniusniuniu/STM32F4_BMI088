@@ -52,3 +52,17 @@ iic_test\main.o: ../Core/Inc/tim.h
 iic_test\main.o: ../Core/Inc/usart.h
 iic_test\main.o: ../Core/Inc/gpio.h
 iic_test\main.o: ..\BMI088\position.h
+iic_test\main.o: ..\VL53L0X\demo\vl53l0x.h
+iic_test\main.o: ..\VL53L0X\core\inc\vl53l0x_api.h
+iic_test\main.o: ..\VL53L0X\core\inc\vl53l0x_api_strings.h
+iic_test\main.o: ..\VL53L0X\core\inc\vl53l0x_def.h
+iic_test\main.o: ..\VL53L0X\core\inc\vl53l0x_device.h
+iic_test\main.o: ..\VL53L0X\platform\inc\vl53l0x_types.h
+iic_test\main.o: ..\VL53L0X\platform\inc\vl53l0x_platform.h
+iic_test\main.o: ..\VL53L0X\platform\inc\vl53l0x_i2c.h
+iic_test\main.o: ..\VL53L0X\platform\inc\vl53l0x_platform_log.h
+iic_test\main.o: D:\keil5\keil5_MDK\keil5_MDK_32\ARM\ARMCC\Bin\..\include\string.h
+iic_test\main.o: ..\VL53L0X\demo\vl53l0x.h
+iic_test\main.o: ..\VL53L0X\demo\vl53l0x_gen.h
+iic_test\main.o: ..\VL53L0X\demo\vl53l0x_cali.h
+iic_test\main.o: ..\VL53L0X\demo\vl53l0x_it.h

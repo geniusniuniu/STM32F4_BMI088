@@ -6,14 +6,17 @@
 
 #include "position.h"
 
-/***************************************各类函数声明****************************************/
-void SystemClock_Config(void);
-int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
-int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len);
-void BMI088_InitFuc(void);
-void MPU9250_DMP_InitFuc(void);
+#include "vl53l0x.h"
+#include "vl53l0x_platform.h"
 
-/*****************************各类变量定义**********************************/
+/***************************************各类函数声明****************************************/
+void Init_All(void);
+void BMI088_InitFunc(void);
+void MPU9250_DMP_InitFunc(void);
+void VL53L0x_InitFunc(void);
+void vl53l0x_test(void);
+void SystemClock_Config(void);
+/***************************************各类变量定义****************************************/
 
 int8_t IMU_Res;//记录IMU初始化状态
 uint8_t data = 0;
@@ -41,31 +44,16 @@ int t = 0;			//t用来控制串口输出频率	改为100ms输出一次
 u8 device_id;
 u8 MPU_Res;
 
-/*****************************主函数*******************************/
+/*************************************** main函数 ****************************************/
 
 int main(void)
 {
-	HAL_Init();
-	SystemClock_Config();
-	delay_init(168);
-	
-	MX_GPIO_Init();
-	MX_I2C1_Init();
-	SoftSim_IIC_Init();
-	//其他相关函数的参数初始化
-	LPF2_ParamSet(50, 8);
-	pos_Estimate_Init();
-
-	MX_USART1_UART_Init();
-	MX_TIM2_Init();
-	HAL_TIM_Base_Start_IT(&htim2);
-	
-/*************************** BMI088 初始化相关 *******************************************/
-	BMI088_InitFuc();	
-/*************************** MPU9250初始化相关 *******************************************/	
-	MPU9250_DMP_InitFuc();	
-	
-	
+	Init_All();		
+/************************************** IMU初始化 ***************************************/
+	BMI088_InitFunc();		
+	MPU9250_DMP_InitFunc();	
+/************************************** TOF初始化 ***************************************/	
+	VL53L0x_InitFunc();
 	while (1)//位置估计 + BMI088角度解算
 	{	   
 		//printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n\r",accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z);//串口输出原始数据 	
@@ -74,13 +62,15 @@ int main(void)
 		
 		mpu_mpl_get_data(&Pitch_9AX,&Roll_9AX,&Yaw_9AX);
 		Pos_Estimate(gyro_x, gyro_y, gyro_z, V3.x, V3.y, V3.z);
+		vl53l0x_test();
 		//Temp_9AX = MPU_Get_Temperature();//得到MPU9250的温度值（扩大了100倍）
 	} 
   
 }
 
 
-/************************* TIM2 中断回调函数 5ms一次 ******************************/
+
+/****************************** TIM2 中断回调函数 5ms一次 ********************************/
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)	
 {
@@ -138,9 +128,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 					count1 = 0;
 					gyro_bias_z = 0;	
 				}	
-				gyro_z1 -= gyro_ave_bias_z*0.835; 
+				//gyro_z1 -= gyro_ave_bias_z*0.835; 
 			}
-			//gyro_z1 -= gyro_ave_bias_z*0.835; 
+			gyro_z1 -= gyro_ave_bias_z*0.835; 
 					
 			//去除零偏之后积分出角度
 			Yaw += (double)gyro_z1*0.005;
@@ -161,15 +151,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if(t >= 20)
 		{
 			printf("6Axis:%f,%f,%f\r\n",-Pitch,Roll,Yaw); 
-			printf("9Axis:%.2f,%.2f,%.2f\r\n"/*,%d\r\n"*/,Pitch_9AX,Roll_9AX,Yaw_9AX/*,Temp_9AX*/); 
+			printf("9Axis:%.2f,%.2f,%.2f\r\n",Pitch_9AX,Roll_9AX,Yaw_9AX); 
 			
 			t = 0;
 		}
 			
 		count++;
-		if(count == 50)
+		if(count == 100)
 		{
-			HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
+			HAL_GPIO_TogglePin(LED_PORT, LED_PIN_1);
 			count = 0;
 		}
 	}
@@ -185,26 +175,11 @@ int fputc(int ch, FILE *f)
 }
 
 
-/********************************I2C相关函数*********************************************/
-int8_t stm32_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
-{
-	HAL_I2C_Mem_Write(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
-	while(HAL_I2C_GetState(&hi2c1) == HAL_I2C_STATE_BUSY);
-	return 0;
-}
-
-int8_t stm32_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len)
-{	
-	HAL_I2C_Mem_Read(&hi2c1, dev_addr<<1, reg_addr, 1, data, len, 100);
-	return 0;
-}
 
 
 
-
-
-/*******************************BMI088初始化相关*******************************************/
-void BMI088_InitFuc(void)
+/***********************************BMI088初始化相关***************************************/
+void BMI088_InitFunc(void)
 {
 	IMU_Res = bmi088_init(&dev);	
 	if(IMU_Res == BMI08X_OK) 
@@ -245,33 +220,147 @@ void BMI088_InitFuc(void)
 
 
 
-void MPU9250_DMP_InitFuc(void)
+void MPU9250_DMP_InitFunc(void)
 {
-	MPU_Res = MPU_Read_Len(MPU9250_ADDR, MPU_DEVICE_ID_REG, 1, &device_id);
-	if(MPU_Res) 
-	{
+	MPU_Res = MPU_Read_Len(MPU9250_ADDR, MPU_DEVICE_ID_REG, 1, &device_id);	// 判断IIC实物接线是否有问题 															
+	if(MPU_Res)																// 同时需要判断MPU9250		
+	{																		// AD0引脚是否接错
 		printf("Read Error:%d\r\n",MPU_Res);
 		while(1);
 	}
-
+	
 	MPU_Res = mpu_dmp_init();
-	if(MPU_Res) 
+	while(1)
 	{
-		printf("DMP Error:%d\r\n",MPU_Res);
-		while(1);
-	} 	 
+		HAL_GPIO_TogglePin(LED_PORT, LED_PIN_2);
+		if(MPU_Res)		
+		{
+			printf("DMP Error:%d\r\n",MPU_Res);			
+		}
+		else
+			break;
+		HAL_Delay(100);
+	}
+	printf("MPU_DMP Init Succeed\r\n");
 }
 
 
+void VL53L0x_InitFunc(void)
+{	
+	//使用片选信号启动第一个tof
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_SET  );	
+	HAL_Delay(100);	//等待，确保tof启动
+	while(vl53l0x_init(&vl53l0x_dev[Axis_X],Xshut_Pin_X))//使用默认地址初始化第一个tof
+	{
+		printf("Xaxis_VL53L0x Error!!!\n\r");
+		HAL_Delay(100);
+		LED0=!LED0;//DS0闪烁
+	}
+	printf("Xaxis_VL53L0X Init OK\r\n");	
+	vl53l0x_Addr_set(&vl53l0x_dev[Axis_X],TOF_X_ADDR);
+	printf("Addr:%#x\r\n",vl53l0x_dev[Axis_X].I2cDevAddr);	
+	
+	//启动第二个TOF
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
+	HAL_Delay(100);	//等待，确保tof启动
+	
+	//使用默认地址初始化第二个tof
+	while(vl53l0x_init(&vl53l0x_dev[Axis_Y],Xshut_Pin_Y))//vl53l0x初始化
+	{
+		printf("Yaxis_VL53L0x Error!!!\n\r");
+		HAL_Delay(100);
+		LED0=!LED0;//DS0闪烁
+	}
+	printf("Yaxis_VL53L0X Init OK\r\n");	
+	vl53l0x_Addr_set(&vl53l0x_dev[Axis_Y],TOF_Y_ADDR);
+	printf("Addr:%#x\r\n",vl53l0x_dev[Axis_Y].I2cDevAddr);
+	
 
+//	//启动第三个TOF
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
+	HAL_Delay(100);	//等待，确保tof启动	
+	
+	//使用默认地址初始化第三个tof
+	while(vl53l0x_init(&vl53l0x_dev[Axis_Z],Xshut_Pin_Z))//vl53l0x初始化
+	{
+		printf("Zaxis_VL53L0x Error!!!\n\r");
+		HAL_Delay(100);
+		LED0=!LED0;//DS0闪烁
+	}
+	printf("Zaxis_VL53L0X Init OK\r\n");
+	
+	//修改第三个tof的iic操作地址
+	vl53l0x_Addr_set(&vl53l0x_dev[Axis_Z],TOF_Z_ADDR);
+	printf("Addr:%#x\r\n",vl53l0x_dev[Axis_Z].I2cDevAddr);
+	
+	//修改TOF读取模式，现在是默认模式，可以在宏定义中找到别的模式
+	if(VL53L0X_ERROR_NONE == vl53l0x_set_mode(&vl53l0x_dev[Axis_X],Default_Mode)) 
+		printf("Xaxis_VL53L0X MODE SET OK\r\n");
+	
+	if(VL53L0X_ERROR_NONE == vl53l0x_set_mode(&vl53l0x_dev[Axis_Y],Default_Mode)) 
+		printf("Yaxis_VL53L0X MODE SET OK\r\n");
+	
+	if(VL53L0X_ERROR_NONE == vl53l0x_set_mode(&vl53l0x_dev[Axis_Z],Default_Mode)) 
+		printf("Zaxis_VL53L0X MODE SET OK\r\n");
+//	vl53l0x_test();//vl53l0x测试（死循环）
 
+}
 
+//VL53L0X测试程序
+void vl53l0x_test(void)
+{   
+	 u8 i=0;
+	 VL53L0X_Error status = 0; 
+	 static char buf[VL53L0X_MAX_STRING_LENGTH];//测试模式字符串字符缓冲区
+	 uint16_t* result = NULL;
+	 while(1)
+	 {		  	 
+		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_X],Axis_X,&vl53l0x_data,buf);
+		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Y],Axis_Y,&vl53l0x_data,buf);
+		status = vl53l0x_start_single_test(&vl53l0x_dev[Axis_Z],Axis_Z,&vl53l0x_data,buf);
+		//result = Filter_Window(Distance_data);
+		 
+		if(status == VL53L0X_ERROR_NONE)
+		{
+			printf("%d,%d,%d\r\n",Distance_data[Axis_X],Distance_data[Axis_Y],Distance_data[Axis_Z]);
+		}
+		else
+			printf("Status:%d\r\n",status);	
+		
+		i++;
+		if(i==5)	//闪灯
+		{			 
+			LED1 =! LED1;
+			i = 0;
+		} 
+	 }
+}
 
-
-
-
-
-
+void Init_All(void)
+{
+	//系统时钟配置初始化
+	HAL_Init();
+	SystemClock_Config();
+	delay_init(168);
+	
+	//IO引脚初始化
+	MX_GPIO_Init();
+	XShut_PinInit();
+	
+	//初始化三个不同的IIC接口
+	MX_I2C1_Init();
+	SoftSim_IIC_Init();
+	VL53L0X_i2c_init();	
+	
+	//外设初始化
+	MX_USART1_UART_Init();
+	MX_TIM2_Init();
+	HAL_TIM_Base_Start_IT(&htim2);
+	
+	//相关函数的参数初始化
+	LPF2_ParamSet(50, 8);
+	Pos_Filter_Init();
+}
 
 
 
